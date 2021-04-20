@@ -1,15 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import quandl
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import average_precision_score
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import plot_precision_recall_curve
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor
+import pandas_datareader as web
+import datetime as dt
+
+#Import current Bitcoin price
+start = dt.datetime(2021,1,1)
+start = start.strftime("%Y-%m-%d")
+
+today = dt.datetime.now()
+today = today.strftime("%Y-%m-%d")
+
+
+P = web.get_data_tiingo('btcusd',start,today, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+P = P['close'].values
 
 
 class Brownian():
@@ -53,7 +57,7 @@ class Brownian():
 
         return w
 
-    def gen_normal(self, n_step=100):
+    def gen_normal(self, n_step=100, sigma = 1):
         """
         Generate motion by drawing from the Normal distribution
 
@@ -70,7 +74,7 @@ class Brownian():
 
         for i in range(1, n_step):
             # Sampling from the Normal distribution
-            yi = np.random.normal()
+            yi = np.random.normal(scale = sigma)
             # Weiner process
             w[i] = w[i - 1] + (yi / np.sqrt(n_step))
 
@@ -110,55 +114,12 @@ class Brownian():
 
         return s
 
-b = Brownian(0)
+val = np.float64(P[-1])
+a = val.item()
 
+b = Brownian(a,a)
 
-for i in range(4):
-    plt.plot(b.gen_normal(1000))
-plt.show()
+predictions = b.gen_normal(60,sigma=10000)
 
-def plot_stock_price(mu,sigma):
-    """
-    Plots stock price for multiple scenarios
-    """
-    plt.figure(figsize=(9,4))
-    for i in range(5):
-        plt.plot(b.stock_price(mu=mu,
-                               sigma=sigma,
-                               dt=0.1))
-    plt.legend(['Scenario-'+str(i) for i in range(1,6)],
-               loc='upper left')
-    plt.hlines(y=100,xmin=0,xmax=520,
-               linestyle='--',color='k')
-    plt.show()
-
-plot_stock_price(0.2,0.65)
-
-
-bp=quandl.get("BCHAIN/MKPRU")
-BP = pd.DataFrame(quandl.get("BCHAIN/MKPRU"),index=None , columns = ['Date','Value'])
-BP.Date = pd.to_datetime(BP.index)
-BP = BP.reset_index(drop=True)
-pd.DataFrame()
-
-WT = pd.read_csv(
-    '/Users/andreacrippa/OneDrive - Université de Lausanne/2nd Semester/Programming_Data Analysis/BitcoinTrendsWiki.csv')
-
-WT.Date = pd.to_datetime(WT.Date)
-
-df = pd.merge(left=BP, right=WT, left_on='Date', right_on='Date')
-
-df.plot(y='Value',x='Date')
-plt.show()
-df.plot(x='Date', y='Bitcoin')
-
-X = df['Bitcoin']
-y = df['Value']
-X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=0)
-
-r = RandomForestRegressor()
-
-r.fit(X = X_train,y = y_train)
-
-#Some random comment
-
+#If we can find mu and beta for Bitcoin might as well use this
+#pred2 = b.stock_price(60)
