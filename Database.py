@@ -1,17 +1,33 @@
 #Creating a database for the project
 #Imports:
 import pandas as pd
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+import pandas_datareader as web
+import datetime as dt
 
-#Download data:
-df = pd.read_csv('Project/BTC_price.csv')
+#Create standard DataFrame
+base = dt.datetime.today()
+date_list = [base - dt.timedelta(days=x) for x in range(5000)]
+date_list = [date_list[x].strftime("%Y-%m-%d") for x in range(len(date_list))]
+date_list = [i for i in reversed(date_list)]
+df = pd.DataFrame(index=date_list)
 
-#Clean the data:
 
-df = df.set_index('Timestamp')
-df = df.set_index(pd.to_datetime(df.index))
-df = df.rename(columns={"market-price": "Price"})
+#Load the data for Bitcoin Price
+Ticker = 'btcusd'
 
-scaler = MinMaxScaler()
-df = pd.DataFrame(scaler.fit_transform(df), columns=df.columns, index=df.index)
+start = dt.datetime(2012,1,1)
+start = start.strftime("%Y-%m-%d")
+
+end = dt.datetime(2020,1,1)
+end = end.strftime("%Y-%m-%d")
+
+Price = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+Price = Price['close'].values
+
+df = df.drop(df[df.index<start].index)
+df = df.drop(df[df.index>end].index)
+df = df.drop(df.index[[0,-1,-2]])
+#February with 29 days is fucking up everything...
+df['Price'] = Price
+
+

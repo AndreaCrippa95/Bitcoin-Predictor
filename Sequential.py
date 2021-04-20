@@ -1,29 +1,17 @@
+#Use the Sequential Neural Network to predict the price of the Bitcoin
+#Imports
 import numpy as np
 import pandas as pd
-from math import *
 import matplotlib.pyplot as plt
 import pandas_datareader as web
 import datetime as dt
-from datetime import date
-
-
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 
-#Load the data
-
-Ticker = 'btcusd'
-
-start = dt.datetime(2012,1,1)
-start = start.strftime("%Y-%m-%d")
-
-end = dt.datetime(2020,1,1)
-end = end.strftime("%Y-%m-%d")
-
-
-df = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-
+#Load the data from Database.py
+from Database import df
+#Scaling the data to be between 0 and 1
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data = scaler.fit_transform(df['close'].values.reshape(-1,1))
 
