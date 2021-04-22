@@ -82,9 +82,9 @@ class Brownian():
 
     def stock_price(
             self,
-            mu=0.2,
-            sigma=0.68,
-            deltaT=52,
+            mu=2556.866219,
+            sigma=3606.743821,
+            deltaT=6,
             dt=0.1
     ):
         """
@@ -119,7 +119,7 @@ a = val.item()
 
 b = Brownian(a,a)
 
-predictions = b.gen_normal(60,sigma=10000)
+#predictions = b.gen_normal(60,sigma=10000)
 
-#If we can find mu and beta for Bitcoin might as well use this
-#pred2 = b.stock_price(60)
+#With historical mu and sigma for Bitcoin:
+res = b.stock_price()
