@@ -30,4 +30,21 @@ df = df.drop(df.index[[0,-1,-2]])
 #February with 29 days is fucking up everything...
 df['Price'] = Price
 
+#GOLD
 
+Ticker = 'gold'
+
+Gold = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+Gold = Gold['close'].values
+
+df['Gold'] = Gold
+
+
+#S&P
+
+Ticker = 'ndaq'
+
+NDAQ = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+NDAQ = NDAQ['close'].values
+
+df['NDAQ'] = NDAQ
