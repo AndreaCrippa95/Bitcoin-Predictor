@@ -32,19 +32,19 @@ df['Price'] = Price
 
 #GOLD
 
-Ticker = 'gold'
+#Ticker = 'gold'
 
-Gold = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-Gold = Gold['close'].values
+#Gold = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+#Gold = Gold['close'].values
 
-df['Gold'] = Gold
+#df['Gold'] = Gold
 
 
 #S&P
 
-Ticker = 'ndaq'
+#Ticker = 'ndaq'
 
-NDAQ = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-NDAQ = NDAQ['close'].values
+#NDAQ = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+#NDAQ = NDAQ['close'].values
 
-df['NDAQ'] = NDAQ
+#df['NDAQ'] = NDAQ
