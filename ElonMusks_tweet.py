@@ -42,7 +42,6 @@ def cleanTwt(twt):
 df['cleaned_tweets'] = df['tweet'].apply(cleanTwt)
 
 #Part for sentiment analysis
-
 def getSubjectivity(twt):
     return TextBlob(twt).sentiment.subjectivity
 def getPolarity(twt):
@@ -60,6 +59,9 @@ def getSentiment(score):
     else:
         return "positive"
 
+df['sentiment'] = df['polarity'].apply(getSentiment)
+
+"""
 plt.figure(figsize=(14,10))
 
 for i in range(0, 1000):
@@ -69,3 +71,9 @@ plt.title("Sentiment Analysis Scatter Plot")
 plt.xlabel('polarity')
 plt.ylabel('subjectivity')
 plt.show()
+plt.savefig("Sentiment Analysis Scatter Plot.png")
+"""
+
+def BTCTwt(twt):
+
+contains BTC btc $BTC $btc bitcoin BITCOIN crypto CRYPTO $Doge Doge DOGE dogecoin $dogecoin
