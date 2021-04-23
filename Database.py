@@ -10,6 +10,7 @@ date_list = [base - dt.timedelta(days=x) for x in range(5000)]
 date_list = [date_list[x].strftime("%Y-%m-%d") for x in range(len(date_list))]
 date_list = [i for i in reversed(date_list)]
 df = pd.DataFrame(index=date_list)
+#test for fetching data to gitehub
 
 
 #Load the data for Bitcoin Price
