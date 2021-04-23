@@ -22,6 +22,12 @@ start = start.strftime("%Y-%m-%d")
 end = dt.datetime(2020,1,1)
 end = end.strftime("%Y-%m-%d")
 
+"""
+#why not written:
+end = base #to have the time actualised daily ?
+end = end.strftime("%Y-%m-%d")
+"""
+
 Price = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
 Price = Price['close'].values
 
@@ -30,6 +36,8 @@ df = df.drop(df[df.index>end].index)
 df = df.drop(df.index[[0,-1,-2]])
 #February with 29 days is fucking up everything...
 df['Price'] = Price
+df.tail()
+
 
 #GOLD
 
@@ -39,7 +47,6 @@ df['Price'] = Price
 #Gold = Gold['close'].values
 
 #df['Gold'] = Gold
-
 
 #S&P
 
