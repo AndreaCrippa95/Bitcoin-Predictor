@@ -1,6 +1,7 @@
 import glob
 import re
 import pandas as pd
+import numpy as np
 from textblob import TextBlob
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import CountVectorizer
@@ -16,12 +17,14 @@ for filename in all_files:
 
 df = pd.concat(all, axis=0, ignore_index=True)
 
+
 list(df.columns.values)
 final_table_columns = ['id', 'date', 'tweet', 'reply_to']
 
 df = df[df.columns.intersection(final_table_columns)]
 df.sort_values(by=['date'], ascending=True)
 
+df.head()
 CV = CountVectorizer( )
 x = CV.fit_transform(df['tweet'])
 
@@ -33,13 +36,30 @@ max_location = total.nlargest(n=50)
 # create a function to clean the tweets
 def cleanTwt(twt):
     twt = re.sub("#bitcoin", 'bitcoin', twt) # removes the '#' from bitcoin
-    twt = re.sub("#Bitcoin", 'Bitcoin', twt) # removes the '#' from Bitcoin
-    twt = re.sub('#[A-Za-z0-9]+', '', twt) # removes any string with a '#'
-    twt = re.sub('\\n', '', twt) # removes the '\n' string
-    twt = re.sub('https:\/\/\S+', '', twt) # removes any hyperlinks
+    twt = re.sub("#Bitcoin", 'bitcoin', twt) # removes the '#' from Bitcoin
+    twt = re.sub("#BTC", 'bitcoin', twt)
+    twt = re.sub("BTC", 'bitcoin', twt)
+    twt = re.sub("$BTC", 'bitcoin', twt)
+    twt = re.sub("$btc", 'bitcoin', twt)
+    twt = re.sub(r'https?:\/\/.*\/\w*',' ',twt)
     return twt
 
+
+mylist = ['BTC', 'btc', '$BTC', '$btc', 'bitcoin', 'BITCOIN', 'crypto', 'CRYPTO', '$Doge', 'Doge', 'DOGE', 'dogecoin', '$dogecoin']
+pattern = '|'.join([f'(?i){a}' for a in mylist])
+
 df['cleaned_tweets'] = df['tweet'].apply(cleanTwt)
+
+df['cleaned_tweets_2'] = df.cleaned_tweets.str.split(expand=False)
+
+df['Cryto Tweets'] = df['cleaned_tweets_2'].str.contains(pattern)
+df.head()
+
+df['Crypto'] = np.where(df['Cryto Tweets'] == 'True', 1, 0)
+df_new = df.drop(df[df['Crypto']==0].index, inplace=True)
+df_new.head()
+
+df[['Cryto Tweets']].sample(100, random_state=42)
 
 #Part for sentiment analysis
 def getSubjectivity(twt):
@@ -74,6 +94,4 @@ plt.show()
 plt.savefig("Sentiment Analysis Scatter Plot.png")
 """
 
-def BTCTwt(twt):
-
-contains BTC btc $BTC $btc bitcoin BITCOIN crypto CRYPTO $Doge Doge DOGE dogecoin $dogecoin
+#searchfor = ['BTC', 'btc', '$BTC', '$btc', 'bitcoin', 'BITCOIN', 'crypto', 'CRYPTO', '$Doge', 'Doge', 'DOGE', 'dogecoin', '$dogecoin']
