@@ -3,23 +3,20 @@
 import pandas as pd
 import pandas_datareader as web
 import datetime as dt
+import quandl as quandl
 
-#Create standard DataFrame
-base = dt.datetime.today()
-date_list = [base - dt.timedelta(days=x) for x in range(5000)]
-date_list = [date_list[x].strftime("%Y-%m-%d") for x in range(len(date_list))]
-date_list = [i for i in reversed(date_list)]
-df = pd.DataFrame(index=date_list)
 #test for fetching data to gitehub
 
+date = pd.date_range(start='1/1/2007', end='1/1/2021')
+df = pd.DataFrame(index=date)
 
 #Load the data for Bitcoin Price
 Ticker = 'btcusd'
 
-start = dt.datetime(2012,1,1)
+start = dt.datetime(2000,1,1)
 start = start.strftime("%Y-%m-%d")
 
-end = dt.datetime(2020,1,1)
+end = dt.date.today()
 end = end.strftime("%Y-%m-%d")
 
 """
@@ -29,30 +26,28 @@ end = end.strftime("%Y-%m-%d")
 """
 
 Price = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-Price = Price['close'].values
+#Drops multilevel index from the Tiingo dataframe
+Price = Price.droplevel('symbol')
+#Drops TimeZone sensitivity from the Tiingo dataframe
+Price = Price.tz_localize(None)
+#Merge the closing Price with the already present dataframe keeping in ciunt the date
 
-df = df.drop(df[df.index<start].index)
-df = df.drop(df[df.index>end].index)
-df = df.drop(df.index[[0,-1,-2]])
-#February with 29 days is fucking up everything...
-df['Price'] = Price
-df.tail()
-
+df = pd.merge(df,Price['close'], how='outer', left_index=True, right_index=True)
 
 #GOLD
 
-#Ticker = 'gold'
+#Gold prices from Quandl, I suppose AM is open and PM is close?
+Gold = quandl.get("LBMA/GOLD", authtoken="Ti1UcxgbNyuqmB78s14S",start_date=start, end_date=end)
 
-#Gold = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-#Gold = Gold['close'].values
-
-#df['Gold'] = Gold
+df = pd.merge(df,Gold['USD (PM)'], how='outer', left_index=True, right_index=True)
 
 #S&P
 
-#Ticker = 'ndaq'
+Ticker = 'ndaq'
 
-#NDAQ = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-#NDAQ = NDAQ['close'].values
+NDAQ = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+NDAQ = NDAQ.droplevel('symbol')
+NDAQ = NDAQ.tz_localize(None)
+df = pd.merge(df,NDAQ['close'], how='outer', left_index=True, right_index=True)
 
-#df['NDAQ'] = NDAQ
+

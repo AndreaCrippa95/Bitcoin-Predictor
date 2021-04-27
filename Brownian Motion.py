@@ -14,9 +14,13 @@ today = today.strftime("%Y-%m-%d")
 
 P = web.get_data_tiingo('btcusd',start,today, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
 P = P['close'].values
+val = np.float64(P[-1])
+a = val.item()
 
 
+#Create Brownian Motion
 class Brownian():
+    
     """
     A Brownian motion class constructor
     """
@@ -80,13 +84,7 @@ class Brownian():
 
         return w
 
-    def stock_price(
-            self,
-            mu=2556.866219,
-            sigma=3606.743821,
-            deltaT=6,
-            dt=0.1
-    ):
+    def stock_price(self,mu=0,sigma=1,deltaT=60,dt=1):
         """
         Models a stock price S(t) using the Weiner process W(t) as
         `S(t) = S(0).exp{(mu-(sigma^2/2).t)+sigma.W(t)}`
@@ -114,12 +112,17 @@ class Brownian():
 
         return s
 
-val = np.float64(P[-1])
-a = val.item()
 
-b = Brownian(a,a)
+b = Brownian(s0=a)
 
 #predictions = b.gen_normal(60,sigma=10000)
 
 #With historical mu and sigma for Bitcoin:
-res = b.stock_price()
+mu = 2556.866219
+sigma = 3606.743821
+res = b.stock_price(mu=2557, sigma=3607)
+
+
+for i in range(100):
+    plt.plot(b.stock_price())
+    plt.show()
