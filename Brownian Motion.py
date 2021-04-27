@@ -84,15 +84,15 @@ class Brownian():
 
         return w
 
-    def stock_price(self,mu=0,sigma=1,deltaT=60,dt=1):
+    def stock_price(self,mu=0.2,sigma=0.68,deltaT=60,dt=1):
         """
         Models a stock price S(t) using the Weiner process W(t) as
         `S(t) = S(0).exp{(mu-(sigma^2/2).t)+sigma.W(t)}`
 
         Arguments:
             s0: Initial stock price, default 100
-            mu: 'Drift' of the stock (upwards or downwards), default 1
-            sigma: 'Volatility' of the stock, default 1
+            mu: 'Drift' of the stock (upwards or downwards), default 0.2
+            sigma: 'Volatility' of the stock, default 0.68
             deltaT: The time period for which the future prices are computed, default 52 (as in 52 weeks)
             dt (optional): The granularity of the time-period, default 0.1
 
@@ -124,5 +124,4 @@ res = b.stock_price(mu=2557, sigma=3607)
 
 
 for i in range(100):
-    plt.plot(b.stock_price())
-    plt.show()
+    plt.plot(b.stock_price(mu=0.23,sigma=0.68)), plt.show()
