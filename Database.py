@@ -16,7 +16,7 @@ Ticker = 'btcusd'
 start = dt.datetime(2020,1,1)
 start = start.strftime("%Y-%m-%d")
 
-end = dt.date.today()
+end = dt.datetime(2021,1,1)
 end = end.strftime("%Y-%m-%d")
 
 """
