@@ -1,10 +1,13 @@
+#normal Imports
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from Sequential import results
-from Database import df
 import datetime as dt
 import pandas_datareader as web
+
+#From previous worksheets
+from Sequential import results
+from Database import df, start, end
 
 act = df['BTC Price']
 
@@ -36,9 +39,9 @@ prepred = pd.DataFrame(results, index=date)
 pred = pd.merge(df2,prepred, how='outer', left_index=True, right_index=True)
 
 fig, ax = plt.subplots()
-act.plot(ax=ax,color='b', label = 'BTC Price (Past)')
-pred.plot(ax=ax, color='r', label = 'BTC Price (Predicted)')
-real.plot(ax=ax,color='g', label = 'BTC Price (Actual)')
-ax.legend(loc='upper right')
-ax.set_title('Bitcoin Price prediction')
+act.plot(ax=ax, color='b', label='Past')
+pred.plot(ax=ax, color='r', label='Predicted')
+real.plot(ax=ax, color='g', label='Actual')
+ax.legend(loc='upper left')
+ax.set_title('Bitcoin Price')
 plt.show()
