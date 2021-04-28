@@ -69,3 +69,4 @@ prediction = np.array(prediction)
 prediction = np.reshape(prediction,(1,days,1))
 results = [scaler.inverse_transform(prediction[i]) for i in range(len(prediction))]
 results = np.array(results)
+results = results.reshape(-1,1)
