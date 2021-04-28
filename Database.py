@@ -7,13 +7,13 @@ import quandl as quandl
 
 #test for fetching data to gitehub
 
-date = pd.date_range(start='1/1/2007', end='1/1/2021')
+date = pd.date_range(start='1/1/2020', end='1/1/2021')
 df = pd.DataFrame(index=date)
 
 #Load the data for Bitcoin Price
 Ticker = 'btcusd'
 
-start = dt.datetime(2000,1,1)
+start = dt.datetime(2020,1,1)
 start = start.strftime("%Y-%m-%d")
 
 end = dt.date.today()
@@ -33,6 +33,8 @@ Price = Price.tz_localize(None)
 #Merge the closing Price with the already present dataframe keeping in ciunt the date
 
 df = pd.merge(df,Price['close'], how='outer', left_index=True, right_index=True)
+df.rename(columns ={'close':'BTC Price'}, inplace = True)
+
 
 #GOLD
 
@@ -49,5 +51,6 @@ NDAQ = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f270
 NDAQ = NDAQ.droplevel('symbol')
 NDAQ = NDAQ.tz_localize(None)
 df = pd.merge(df,NDAQ['close'], how='outer', left_index=True, right_index=True)
+df.rename(columns ={'close':'NDAQ Price'}, inplace = True)
 
 

@@ -9,7 +9,7 @@ from tensorflow.keras.layers import Dense, Dropout, LSTM
 from Database import df
 #Scaling the data to be between 0 and 1
 scaler = MinMaxScaler(feature_range=(0,1))
-scaled_data = scaler.fit_transform(df['Price'].values.reshape(-1,1))
+scaled_data = scaler.fit_transform(df.values.reshape(-1,1))
 
 #Days used to predict future price
 days = 60
