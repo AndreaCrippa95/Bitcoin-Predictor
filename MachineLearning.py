@@ -62,9 +62,19 @@ for name, model in pipelines:
     print(name, results[i])
 '''
 
-predictor = df.shift(-prediction_days)
+#Scaler missing...
+df = df.dropna()
 
+predictor = df['BTC Price'].shift(-prediction_days)
 
-scaler = MinMaxScaler()
-scaled_data = pd.DataFrame(scaler.fit_transform(df), columns=df.columns, index=df.index)
+X = np.array(df)
+X = X[:len(df)-prediction_days]
 
+y = np.array(predictor)
+y = y[:-prediction_days]
+y = y.reshape(-1,1)
+
+model = RandomForestRegressor()
+model.fit(X, y.ravel())
+results = model.predict(np.array(df[-prediction_days:]))
+results = results.reshape(-1,1)
