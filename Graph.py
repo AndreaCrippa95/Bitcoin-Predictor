@@ -6,27 +6,21 @@ import datetime as dt
 import pandas_datareader as web
 
 #From previous worksheets
-from MachineLearning import results
+from MachineLearning import results, model
 from Database import df, start, end, prediction_days
 
 act = df['BTC Price']
 
 #Create Real Values
 s = start
-e = end +  dt.timedelta(days=prediction_days)
-date = pd.date_range(start=s.strftime("%m/%d/%Y"), end=e.strftime("%m/%d/%Y"))
+e = end +  dt.timedelta(days=prediction_days-1)
+date = pd.date_range(start=end.strftime("%m/%d/%Y"), end=e.strftime("%m/%d/%Y"))
 df2 = pd.DataFrame(index=date)
 
 #Load the data for Bitcoin Price
 Ticker = 'btcusd'
 
-
-start = start.strftime("%Y-%m-%d")
-
-
-end = end.strftime("%Y-%m-%d")
-
-Price = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+Price = web.get_data_tiingo(Ticker,s.strftime("%Y-%m-%d"),e.strftime("%Y-%m-%d"), api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
 #Drops multilevel index from the Tiingo dataframe
 Price = Price.droplevel('symbol')
 #Drops TimeZone sensitivity from the Tiingo dataframe
@@ -44,5 +38,5 @@ act.plot(ax=ax, color='b', label='Past')
 pred.plot(ax=ax, color='r', label='Predicted')
 real.plot(ax=ax, color='g', label='Actual')
 ax.legend(loc='upper left')
-ax.set_title('Bitcoin Price')
+ax.set_title('Bitcoin Price '+str(model))
 plt.show()
