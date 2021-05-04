@@ -74,7 +74,26 @@ y = np.array(predictor)
 y = y[:-prediction_days]
 y = y.reshape(-1,1)
 
-model = RandomForestRegressor()
+#model = RandomForestRegressor()
+
+model = GradientBoostingRegressor()
+
+#model = LinearRegression()
+
+#model = GradientBoostingRegressor()
+
+#model = RandomForestRegressor()
+
+#model = Lasso()
+
+#model = KNeighborsRegressor()
+
+#model = ElasticNet()
+
+#model = DecisionTreeRegressor()
+
 model.fit(X, y.ravel())
 results = model.predict(np.array(df[-prediction_days:]))
 results = results.reshape(-1,1)
+
+print(results)

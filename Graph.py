@@ -6,23 +6,24 @@ import datetime as dt
 import pandas_datareader as web
 
 #From previous worksheets
-from Sequential import results
-from Database import df, start, end
+from MachineLearning import results
+from Database import df, start, end, prediction_days
 
 act = df['BTC Price']
 
 #Create Real Values
-
-date = pd.date_range(start='1/1/2021', end='3/1/2021')
+s = start
+e = end +  dt.timedelta(days=prediction_days)
+date = pd.date_range(start=s.strftime("%m/%d/%Y"), end=e.strftime("%m/%d/%Y"))
 df2 = pd.DataFrame(index=date)
 
 #Load the data for Bitcoin Price
 Ticker = 'btcusd'
 
-start = dt.datetime(2021,1,1)
+
 start = start.strftime("%Y-%m-%d")
 
-end = dt.datetime(2021,3,1)
+
 end = end.strftime("%Y-%m-%d")
 
 Price = web.get_data_tiingo(Ticker,start,end, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))

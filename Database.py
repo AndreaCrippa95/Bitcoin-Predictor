@@ -10,6 +10,7 @@ import quandl as quandl
 #For easier setup of dates:
 start = dt.datetime(2020,1,1)
 end = dt.datetime(2021,1,1)
+prediction_days = 60
 
 a = start.strftime("%d/%m/%Y")
 b= end.strftime("%d/%m/%Y")
