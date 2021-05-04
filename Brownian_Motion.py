@@ -83,7 +83,7 @@ class Brownian():
 
         return w
 
-    def stock_price(self,mu=0.2,sigma=0.68,deltaT=60,dt=1):
+    def stock_price(self,mu=0.25,sigma=0.68,deltaT=60,dt=1):
         """
         Models a stock price S(t) using the Weiner process W(t) as
         `S(t) = S(0).exp{(mu-(sigma^2/2).t)+sigma.W(t)}`
@@ -114,7 +114,7 @@ class Brownian():
 
 b = Brownian(s0=a)
 
-results = b.stock_price(60)
+results = b.stock_price(deltaT = prediction_days)
 
 #With historical mu and sigma for Bitcoin:
 '''
