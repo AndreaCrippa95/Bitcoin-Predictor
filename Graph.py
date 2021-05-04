@@ -7,14 +7,14 @@ import pandas_datareader as web
 
 #From previous worksheets
 from MachineLearning import results, model
-from Database import df, start, end, prediction_days
+from Database import df, end, prediction_days
 
 act = df['BTC Price']
 
 #Create Real Values
-s = start
-e = end +  dt.timedelta(days=prediction_days-1)
-date = pd.date_range(start=end.strftime("%m/%d/%Y"), end=e.strftime("%m/%d/%Y"))
+s = end
+e = end + dt.timedelta(days=prediction_days-1)
+date = pd.date_range(start=s.strftime("%m/%d/%Y"), end=e.strftime("%m/%d/%Y"))
 df2 = pd.DataFrame(index=date)
 
 #Load the data for Bitcoin Price
@@ -40,3 +40,6 @@ real.plot(ax=ax, color='g', label='Actual')
 ax.legend(loc='upper left')
 ax.set_title('Bitcoin Price '+str(model))
 plt.show()
+fig.savefig('Graphs/Bitcoin_Price'+str(model)+'.png')
+plt.close(fig)
+

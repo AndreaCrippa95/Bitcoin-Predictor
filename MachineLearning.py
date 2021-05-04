@@ -14,9 +14,7 @@ from sklearn.model_selection  import train_test_split
 from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from Database import df
-
-prediction_days = 60
+from Database import df, prediction_days
 
 '''
 df['Prediction'] = df[[0]].shift(-prediction_days)
@@ -76,9 +74,9 @@ y = y.reshape(-1,1)
 
 #model = RandomForestRegressor()
 
-model = GradientBoostingRegressor()
+#model = GradientBoostingRegressor()
 
-#model = LinearRegression()
+model = LinearRegression()
 
 #model = GradientBoostingRegressor()
 
