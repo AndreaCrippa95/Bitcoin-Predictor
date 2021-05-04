@@ -8,8 +8,8 @@ import quandl as quandl
 #test for fetching data to gitehub
 
 #For easier setup of dates:
-start = dt.datetime(2020,1,1)
-end = dt.datetime(2021,1,1)
+start = dt.datetime(2018,1,1)
+end = dt.datetime(2019,1,1)
 prediction_days = 60
 
 a = start.strftime("%d/%m/%Y")
