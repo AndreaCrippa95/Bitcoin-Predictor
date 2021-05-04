@@ -3,16 +3,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pandas_datareader as web
 import datetime as dt
+from Database import start, end, prediction_days
+model = 'Brownian Motion'
 
 #Import current Bitcoin price
-start = dt.datetime(2021,1,1)
-start = start.strftime("%Y-%m-%d")
 
-today = dt.datetime.now()
-today = today.strftime("%Y-%m-%d")
+s = start.strftime("%Y-%m-%d")
+e = end.strftime("%Y-%m-%d")
 
-
-P = web.get_data_tiingo('btcusd',start,today, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+P = web.get_data_tiingo('btcusd',s,e, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
 P = P['close'].values
 val = np.float64(P[-1])
 a = val.item()
@@ -115,13 +114,11 @@ class Brownian():
 
 b = Brownian(s0=a)
 
-#predictions = b.gen_normal(60,sigma=10000)
+results = b.stock_price(60)
 
 #With historical mu and sigma for Bitcoin:
+'''
 mu = 2556.866219
 sigma = 3606.743821
 res = b.stock_price(mu=2557, sigma=3607)
-
-
-for i in range(100):
-    plt.plot(b.stock_price(mu=0.23,sigma=0.68)), plt.show()
+'''
