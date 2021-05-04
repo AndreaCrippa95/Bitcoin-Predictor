@@ -94,4 +94,3 @@ model.fit(X, y.ravel())
 results = model.predict(np.array(df[-prediction_days:]))
 results = results.reshape(-1,1)
 
-print(results)

@@ -6,13 +6,13 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 
 #Load the data from Database.py
-from Database import df
+from Database import df,prediction_days
 #Scaling the data to be between 0 and 1
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data = scaler.fit_transform(df.values.reshape(-1,1))
 model = 'Sequential Neural Network'
 #Days used to predict future price
-days = 60
+days = prediction_days
 
 X_train = []
 y_train = []

@@ -6,7 +6,7 @@ import datetime as dt
 import pandas_datareader as web
 
 #From previous worksheets
-from MachineLearning import results, model
+from Sequential import results, model
 from Database import df, end, prediction_days
 
 act = df['BTC Price']
