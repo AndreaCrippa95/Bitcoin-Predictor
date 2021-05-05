@@ -6,7 +6,7 @@ import datetime as dt
 import pandas_datareader as web
 
 #From previous worksheets
-from Brownian_Motion import model
+from MachineLearning import model
 
 start = dt.datetime(2018,1,1)
 end = dt.datetime(2019,1,1)

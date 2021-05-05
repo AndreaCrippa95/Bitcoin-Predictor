@@ -81,13 +81,13 @@ y = y.reshape(-1,1)
 
 #model = GradientBoostingRegressor()
 
-model = LinearRegression()
+#model = LinearRegression()
 
 #model = GradientBoostingRegressor()
 
 #model = RandomForestRegressor()
 
-#model = Lasso()
+model = Lasso()
 
 #model = KNeighborsRegressor()
 
