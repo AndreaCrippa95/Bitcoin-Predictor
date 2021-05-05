@@ -8,9 +8,9 @@ import quandl as quandl
 #test for fetching data to gitehub
 
 #For easier setup of dates:
-start = dt.datetime(2018,1,1)
-end = dt.datetime(2019,1,1)
-prediction_days = 60
+global start
+global end
+global prediction_days
 
 a = start.strftime("%d/%m/%Y")
 b = end.strftime("%d/%m/%Y")

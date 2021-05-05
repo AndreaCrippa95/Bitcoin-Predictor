@@ -7,7 +7,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 
 #Load the data from Database.py
-prediction_days = 60
+global prediction_days
 
 df = pd.read_csv('data/DataFrame',index_col=0)
 df.index = df.index.astype('<M8[ns]')

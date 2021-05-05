@@ -16,9 +16,9 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
 #Would like to make this global
-prediction_days = 60
+global prediction_days
 
-df = pd.read_csv('data/DataFrame',index_col=0)
+df = pd.read_csv('data/DataFrame', index_col=0)
 df.index = df.index.astype('<M8[ns]')
 
 '''

@@ -8,9 +8,10 @@ import pandas_datareader as web
 #From previous worksheets
 from MachineLearning import model
 
-start = dt.datetime(2018,1,1)
-end = dt.datetime(2019,1,1)
-prediction_days = 60
+#From Input
+global end
+global start
+global prediction_days
 
 df = pd.read_csv('data/DataFrame',index_col=0)
 df.rename(columns ={'BTC Price':'Past Price'}, inplace = True)

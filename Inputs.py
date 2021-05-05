@@ -3,7 +3,7 @@ import datetime as dt
 
 def Init():
     global start
-    start = dt.datetime(2018,1,1)
+    start = dt.datetime(2012,1,1)
     global end
     end  = dt.datetime(2019,1,1)
     global prediction_days
