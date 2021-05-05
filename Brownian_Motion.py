@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pandas_datareader as web
 import datetime as dt
+
+#Probably will change this
 from Database import start, end, prediction_days
 model = 'Brownian Motion'
 
@@ -115,7 +117,7 @@ class Brownian():
 b = Brownian(s0=a)
 
 results = b.stock_price(deltaT = prediction_days)
-
+np.savetxt('data/results',results)
 #With historical mu and sigma for Bitcoin:
 '''
 mu = 2556.866219

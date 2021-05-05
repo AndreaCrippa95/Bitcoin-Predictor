@@ -57,3 +57,6 @@ df = pd.merge(df,NDAQ['close'], how='outer', left_index=True, right_index=True)
 df.rename(columns ={'close':'NDAQ Price'}, inplace = True)
 
 df = df.dropna()
+
+
+df.to_csv('data/DataFrame')
