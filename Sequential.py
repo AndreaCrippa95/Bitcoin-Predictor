@@ -1,12 +1,16 @@
 #Use the Sequential Neural Network to predict the price of the Bitcoin
 #Imports
 import numpy as np
+import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 
 #Load the data from Database.py
-from Database import df,prediction_days
+prediction_days = 60
+
+df = pd.read_csv('data/DataFrame',index_col=0)
+df.index = df.index.astype('<M8[ns]')
 #Scaling the data to be between 0 and 1
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data = scaler.fit_transform(df.values.reshape(-1,1))
@@ -70,3 +74,4 @@ prediction = np.reshape(prediction,(1,days,1))
 results = [scaler.inverse_transform(prediction[i]) for i in range(len(prediction))]
 results = np.array(results)
 results = results.reshape(-1,1)
+np.savetxt('data/results',results)

@@ -14,7 +14,12 @@ from sklearn.model_selection  import train_test_split
 from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from Database import df, prediction_days
+
+#Would like to make this global
+prediction_days = 60
+
+df = pd.read_csv('data/DataFrame',index_col=0)
+df.index = df.index.astype('<M8[ns]')
 
 '''
 df['Prediction'] = df[[0]].shift(-prediction_days)
@@ -93,4 +98,4 @@ model = LinearRegression()
 model.fit(X, y.ravel())
 results = model.predict(np.array(df[-prediction_days:]))
 results = results.reshape(-1,1)
-
+np.savetxt('data/results',results)
