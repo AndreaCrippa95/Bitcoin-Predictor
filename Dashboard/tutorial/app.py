@@ -13,6 +13,7 @@ df.head()
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+#From here onwards you have to define all the functions parts of your dash
 fig = px.line(x=df["Date"], y=df["Close"])
 
 dcc.Dropdown(
@@ -32,9 +33,12 @@ dcc.Dropdown(
     ],
     value='RNN'
 )
+#from here onwards you have to define the modification done by the user
+
+@app.callback
 
 
-
+#from here onwards you have to define the layout of the Dashb
 app.layout = html.Div(children=[
     html.H1(children='Welcome to our Bitcoin Forecasting Dashboard'),
     html.Div(children='The forecast in this blog are for general informational purposes only and are not intended to provide specific advice financial advise.'),
@@ -45,7 +49,7 @@ app.layout = html.Div(children=[
     dcc.Dropdown(id='to define')
 ])
 
-
+#from here onwards you have to define on which server you want to define your dash
 server = app.server
 if __name__ == '__main__':
     app.run_server(

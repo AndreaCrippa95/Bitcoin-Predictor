@@ -6,10 +6,10 @@ import datetime as dt
 import pandas_datareader as web
 
 #From previous worksheets
-import os
-import sys
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
-sys.path.append(os.path.abspath(path))
+#import os
+#import sys
+#path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
+#sys.path.append(os.path.abspath(path))
 from MachineLearning import model
 
 #From Input
