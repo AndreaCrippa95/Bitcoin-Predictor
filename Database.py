@@ -11,6 +11,15 @@ import quandl as quandl
 global start
 global end
 global prediction_days
+'''
+import os
+import sys
+path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
+sys.path.append(os.path.abspath(path))
+from Inputs import Init
+start = dt.datetime(2012,1,1)
+end  = dt.datetime(2019,1,1)
+'''
 
 a = start.strftime("%d/%m/%Y")
 b = end.strftime("%d/%m/%Y")
@@ -21,12 +30,6 @@ df = pd.DataFrame(index=date)
 Ticker = 'btcusd'
 c = start.strftime("%Y-%m-%d")
 d = end.strftime("%Y-%m-%d")
-
-"""
-#why not written:
-end = base #to have the time actualised daily ?
-end = end.strftime("%Y-%m-%d")
-"""
 
 Price = web.get_data_tiingo(Ticker,c,d, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
 #Drops multilevel index from the Tiingo dataframe
@@ -57,6 +60,9 @@ df = pd.merge(df,NDAQ['close'], how='outer', left_index=True, right_index=True)
 df.rename(columns ={'close':'NDAQ Price'}, inplace = True)
 
 df = df.dropna()
-
+'''
+path = 'Users/flavio/Documents/GitHub/Bitcoin-Predictor/data'
+save_df = df.to_csv(path + '/DataFrame.csv')
+'''
 
 df.to_csv('data/DataFrame')
