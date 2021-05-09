@@ -10,8 +10,8 @@ import pandas_datareader as web
 #import sys
 #path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
 #sys.path.append(os.path.abspath(path))
-from MachineLearning import model
-
+#from MachineLearning import model
+model = 'Lasso'
 #From Input
 global end
 global start

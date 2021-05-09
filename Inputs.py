@@ -8,3 +8,5 @@ def Init():
     end  = dt.datetime(2019,1,1)
     global prediction_days
     prediction_days = 60
+
+Init()
