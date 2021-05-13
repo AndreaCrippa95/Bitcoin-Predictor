@@ -56,5 +56,3 @@ ax.set_title('Bitcoin Price '+str(model))
 plt.show()
 fig.savefig('Graphs/Bitcoin_Price'+str(model)+'.png')
 plt.close(fig)
-
-print(pred)

@@ -20,6 +20,23 @@ import Inputs
 prediction_days = Inputs.prediction_days
 ChModel = Inputs.ChModel
 
+if ChModel in ['RFR']:
+    model = RandomForestRegressor()
+elif ChModel in ['GBR']:
+    model = GradientBoostingRegressor()
+elif ChModel in ['LR']:
+    model = LinearRegression()
+elif ChModel in ['Lasso']:
+    model = Lasso()
+elif ChModel in ['KNR']:
+    model = KNeighborsRegressor()
+elif ChModel in ['EN']:
+    model = ElasticNet()
+elif ChModel in ['DTR']:
+    model = DecisionTreeRegressor()
+else:
+    sys.exit()
+
 df = pd.read_csv('data/DataFrame', index_col=0)
 df.index = df.index.astype('<M8[ns]')
 
@@ -78,23 +95,6 @@ X = X[:len(df)-prediction_days]
 y = np.array(predictor)
 y = y[:-prediction_days]
 y = y.reshape(-1,1)
-
-if (ChModel == 'RFR'):
-    model = RandomForestRegressor()
-if (ChModel == 'GBR'):
-    model = GradientBoostingRegressor()
-if (ChModel == 'LR'):
-    model = LinearRegression()
-if (ChModel == 'Lasso'):
-    model = Lasso()
-if (ChModel == 'KNR'):
-    model = KNeighborsRegressor()
-if (ChModel == 'EN'):
-    model = ElasticNet()
-if (ChModel == 'DTR'):
-    model = DecisionTreeRegressor()
-else:
-    sys.exit()
 
 model.fit(X, y.ravel())
 results = model.predict(np.array(df[-prediction_days:]))
