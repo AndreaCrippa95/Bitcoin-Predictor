@@ -7,7 +7,7 @@ end = dt.datetime(2015,1,1)
 
 prediction_days = 60
 
-ChModel = 'Lasso'
+ChModel = 'BM'
 
 RES = True
 
