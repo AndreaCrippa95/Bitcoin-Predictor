@@ -9,6 +9,7 @@ python Brownian_Motion.py
 python Sequential.py
 ##############################################
 python Graph.py
+python Results.py
 ##############################################
 clear
 ##############################################
