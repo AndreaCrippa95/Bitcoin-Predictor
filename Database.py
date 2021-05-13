@@ -4,13 +4,15 @@ import pandas as pd
 import pandas_datareader as web
 import datetime as dt
 import quandl as quandl
+import Inputs
+import sys
 
 #test for fetching data to gitehub
 
 #For easier setup of dates:
-global start
-global end
-global prediction_days
+start = Inputs.start
+end = Inputs.end
+prediction_days = Inputs.prediction_days
 '''
 import os
 import sys

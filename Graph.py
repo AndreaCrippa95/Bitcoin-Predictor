@@ -4,18 +4,13 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 import pandas_datareader as web
+import Inputs
 
-#From previous worksheets
-#import os
-#import sys
-#path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
-#sys.path.append(os.path.abspath(path))
-#from MachineLearning import model
-model = 'Lasso'
 #From Input
-global end
-global start
-global prediction_days
+start = Inputs.start
+end = Inputs.end
+prediction_days = Inputs.prediction_days
+model = Inputs.ChModel
 
 df = pd.read_csv('data/DataFrame',index_col=0)
 df.rename(columns ={'BTC Price':'Past Price'}, inplace = True)
@@ -61,3 +56,5 @@ ax.set_title('Bitcoin Price '+str(model))
 plt.show()
 fig.savefig('Graphs/Bitcoin_Price'+str(model)+'.png')
 plt.close(fig)
+
+print(pred)
