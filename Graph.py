@@ -50,6 +50,7 @@ if GRA:
 
     Final = pd.merge(act,pred, how='outer', left_index=True, right_index=True)
     Final = pd.merge(Final,real, how='outer', left_index=True, right_index=True)
+    Final = Final.tail(prediction_days+5)
 
     fig, ax = plt.subplots()
     Final.plot(ax=ax)
