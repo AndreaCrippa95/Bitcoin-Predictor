@@ -1,6 +1,3 @@
-from sklearn.linear_model import LinearRegression
-
-
 import flask
 import dash
 import dash_core_components as dcc
