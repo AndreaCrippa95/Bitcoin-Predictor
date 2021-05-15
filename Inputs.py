@@ -10,12 +10,12 @@ prediction_days = 10
 #Choose the input data
 BTC_Price = True
 
-Gold_Price = False
+Gold_Price = True
 
-NDAQ_Price = False
+NDAQ_Price = True
 
 #Choose a model:
-ChModel = 'Sequential'
+ChModel = 'LR'
 
 #Choose the desired output
 RES = True
