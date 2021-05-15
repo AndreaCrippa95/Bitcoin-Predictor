@@ -39,30 +39,15 @@ dcc.RadioItems(
     ],
     value='BTC')
 
-#from here onwards you have the text
-DatePicker_text = '''
-### 100 DAYS
+#from here onwards you have the text, will defined later on.
+DatePicker_text = ''' ### Please select the date'''
 
-From here on you can choose the timeframe to make a prediction
-Dash uses the [CommonMark](http://commonmark.org/)
-'''
-
-Dropdown_text = '''
-### MODEL SELECTION
-
-
-MODEL 1 : In statistics, linear regression is a linear approach to modelling the relationship between a scalar response and one or more explanatory variables (also known as dependent and independent variables).
-MODEL 2 : A recurrent neural network (RNN) is a class of artificial neural networks where connections between nodes form a directed graph along a temporal sequence.
-MODEL 3 : In mathematics, a random walk is a mathematical object, known as a stochastic or random process, that describes a path that consists of a succession of random steps on some mathematical space such as the integers.
-
-From here on you can choose the model for the predictions
-Dash uses the [CommonMark](http://commonmark.org/)
-'''
+Dropdown_text = ''' ### MODEL SELECTION '''
 
 #from here onwards you have to define the layout of the Dashb
 app.layout = html.Div([
     html.H1(children=' Welcome to our BTC Forecasting Platform.'),
-    html.Div(children='The forecast in this blog are for general informational purposes only and are not intended to provide specific advice financial advise.'),
+    html.Div(children='Forecast'),
     html.Div(children='General overview.'),
     dcc.RadioItems(
                 id='yaxis-type',
@@ -73,34 +58,68 @@ app.layout = html.Div([
     dcc.Graph(id='overview_graph',
         figure=fig
         ),
-
     dcc.Markdown(children=DatePicker_text),
+    dcc.DatePickerSingle(
+        id='my-date-picker-single',
+        min_date_allowed=date(2011, 8, 5),
+        max_date_allowed=date(2020, 9, 19),
+        initial_visible_month=date(2017, 8, 5),
+        date=date(2017, 8, 25)
+    ),
 
+    html.Button('50 DAYS', id='btn-1'),
+    html.Button('100 DAYS', id='btn-2'),
+    html.Button('500 DAYS', id='btn-3'),
+    html.Div(id='container'),
 
 
     dcc.Markdown(children=Dropdown_text),
     dcc.Dropdown(id="dropdown_model",
         options=[
-            {'label': 'Linear Regression', 'value': 'LR'},
-            {'label': 'RNN', 'value': 'RNN'},
-            {'label': 'Random Walk', 'value': 'RW'}],
+            {'label': 'RandomForestRegressor', 'value': 'RFR'},
+            {'label': 'GradientBoostingRegressor', 'value': 'GBR'},
+            {'label': 'LinearRegression', 'value': 'LR'},
+            {'label': 'Lasso', 'value': 'Lasso'},
+            {'label': 'KNeighborsRegressor', 'value': 'KNR'},
+            {'label': 'ElasticNet', 'value': 'EN'},
+            {'label': 'DecisionTreeRegressor', 'value': 'DTR'}],
         placeholder="Select a model"),
+    html.Div(id='output-container-date-picker-single'),
 
     html.Div(id="my_output")
 
 ])
 
 #from here onwards you have to define the modification done by the user
-"""
+
 @app.callback(
-    Output(component_id='overview_graph', component_property='figure'),
-    Input(component_id='yaxis-type', component_property='value'))
+    [Output(component_id='overview_graph', component_property='figure')],
+    [Input(component_id='yaxis-type', component_property='value')])
 
 def update_graph(yaxis_type):
     fig.update_yaxes(type='linear' if yaxis_type == 'Linear' else 'log')
 
     return fig
+
+@app.callback(
+    [Output('output-container-date-picker-single', 'children')],
+    [Input('my-date-picker-single', 'date')])
+def update_output(date_value):
+    string_prefix = 'You have selected: '
+    if date_value is not None:
+        date_object = date.fromisoformat(date_value)
+        date_string = date_object.strftime('%B %d, %Y')
+        return string_prefix + date_string
 """
+@app.callback(
+    [Output('container', 'children')],
+    [Input('btn-1', 'days')],
+    [Input('btn-2', 'days')],
+    [Input('btn-3', 'days')])
+def change_text(days):
+    return ["Number of days is " + str(days)]
+"""
+
 #from here onwards you have to define on which server you want to define your dash
 server = app.server
 if __name__ == '__main__':
