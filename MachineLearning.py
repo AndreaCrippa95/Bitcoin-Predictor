@@ -2,7 +2,7 @@
 #Imports:
 import pandas as pd
 import numpy as np
-from sklearn.pipeline import Pipeline
+import sys
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.linear_model import Lasso
@@ -14,9 +14,28 @@ from sklearn.model_selection  import train_test_split
 from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
+import Inputs
 
 #Would like to make this global
-global prediction_days
+prediction_days = Inputs.prediction_days
+ChModel = Inputs.ChModel
+
+if ChModel in ['RFR']:
+    model = RandomForestRegressor()
+elif ChModel in ['GBR']:
+    model = GradientBoostingRegressor()
+elif ChModel in ['LR']:
+    model = LinearRegression()
+elif ChModel in ['Lasso']:
+    model = Lasso()
+elif ChModel in ['KNR']:
+    model = KNeighborsRegressor()
+elif ChModel in ['EN']:
+    model = ElasticNet()
+elif ChModel in ['DTR']:
+    model = DecisionTreeRegressor()
+else:
+    sys.exit()
 
 df = pd.read_csv('data/DataFrame', index_col=0)
 df.index = df.index.astype('<M8[ns]')
@@ -76,24 +95,6 @@ X = X[:len(df)-prediction_days]
 y = np.array(predictor)
 y = y[:-prediction_days]
 y = y.reshape(-1,1)
-
-#model = RandomForestRegressor()
-
-#model = GradientBoostingRegressor()
-
-#model = LinearRegression()
-
-#model = GradientBoostingRegressor()
-
-#model = RandomForestRegressor()
-
-model = Lasso()
-
-#model = KNeighborsRegressor()
-
-#model = ElasticNet()
-
-#model = DecisionTreeRegressor()
 
 model.fit(X, y.ravel())
 results = model.predict(np.array(df[-prediction_days:]))
