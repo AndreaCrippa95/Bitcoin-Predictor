@@ -1,8 +1,6 @@
-from sklearn.linear_model import LinearRegression
-
+import dash
 
 import flask
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objects as go
@@ -15,6 +13,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
 df = pd.read_csv(path, header=0)
+df.head()
 df.columns.values[0] = 'Date'
 df.columns.values[2] = 'Gold'
 df.columns.values[3] = 'NASDAQ'
