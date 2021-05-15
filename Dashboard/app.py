@@ -1,5 +1,4 @@
 import dash
-
 import flask
 import dash_core_components as dcc
 import dash_html_components as html
@@ -11,7 +10,7 @@ from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
+path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/data/DF_train.csv'
 df = pd.read_csv(path, header=0)
 df.head()
 df.columns.values[0] = 'Date'
@@ -76,13 +75,7 @@ app.layout = html.Div([
         ),
 
     dcc.Markdown(children=DatePicker_text),
-    dcc.DatePickerRange(
-        start_date=date(2012,1,1),
-        end_date=date(2019,1,1),
-        minimum_nights=100,
-        clearable=True,
-        with_portal=True
-        ),
+
 
 
     dcc.Markdown(children=Dropdown_text),
@@ -98,7 +91,7 @@ app.layout = html.Div([
 ])
 
 #from here onwards you have to define the modification done by the user
-
+"""
 @app.callback(
     Output(component_id='overview_graph', component_property='figure'),
     Input(component_id='yaxis-type', component_property='value'))
@@ -107,7 +100,7 @@ def update_graph(yaxis_type):
     fig.update_yaxes(type='linear' if yaxis_type == 'Linear' else 'log')
 
     return fig
-
+"""
 #from here onwards you have to define on which server you want to define your dash
 server = app.server
 if __name__ == '__main__':
