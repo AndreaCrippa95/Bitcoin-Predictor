@@ -1,52 +1,57 @@
+
+import pathlib
 import dash
-import flask
-import dash_core_components as dcc
-import dash_html_components as html
-import plotly.graph_objects as go
-import plotly.express as px
 import pandas as pd
-from datetime import date
-
-from dash import Dash
-from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+import dash_html_components as html
+from dash.exceptions import PreventUpdate
+import dash_table
+import os
+import sys
 
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/data/DF_train.csv'
-df = pd.read_csv(path, header=0)
-df.head()
-df.columns.values[0] = 'Date'
-df.columns.values[2] = 'Gold'
-df.columns.values[3] = 'NASDAQ'
+pat = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Inputs.py'
+sys.path.append(pat)
+import Inputs
+app = dash.Dash(
+    __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
+)
+path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
+os.chdir(path)
+    # Layout of Dash App HTML
 
-prediction_days = 100
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
-app.layout = html.Div([
-
-    dcc.Dropdown(id="dropdown_model",
-            options=[
-                {'label': 'RandomForestRegressor', 'value': 'RFR'},
-                {'label': 'GradientBoostingRegressor', 'value': 'GBR'},
-                {'label': 'LinearRegression', 'value': 'LR'},
-                {'label': 'Lasso', 'value': 'Lasso'},
-                {'label': 'KNeighborsRegressor', 'value': 'KNR'},
-                {'label': 'ElasticNet', 'value': 'EN'},
-                {'label': 'DecisionTreeRegressor', 'value': 'DTR'}],
-            placeholder="Select a model"),
-
-    html.Div(id='id-output')
-
-])
+app.layout = html.Div(
+                children=[html.Div(
+                            html.Button('Detect', id='button'),
+                            html.Div(id='output-container-button',
+                            children='Hit the button to update.')
+                    ),
+                ],
+            )
 
 @app.callback(
-    [Output(component_id='id-output',component_property='children')],
-    [Input(component_id='dropdown_model',component_property='value')])
+    [Output('output-container-button', 'children')],
+    [Input('button', 'n_clicks')])
 
+script_fn = '
+exec(open(script_fn).read())
 
-server = app.server
-if __name__ == '__main__':
-    app.run_server(
-        port=8060,
-        host='0.0.0.0')
+''' 
+def run_script_onClick(n_clicks):
+    # Don't run unless the button has been pressed...
+    if not n_clicks:
+        raise PreventUpdate
+
+    script_path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Inputs.py'
+    # The output of a script is always done through a file dump.
+    # Let's just say this call dumps some data into an `output_file`
+    call(["python3", script_path])
+
+    # Load your output file with "some code"
+    output_content = lastodash
+    # Now return.
+    return output_content
+# Main
+'''
+if __name__ == "__main__":
+    app.run_server()
+

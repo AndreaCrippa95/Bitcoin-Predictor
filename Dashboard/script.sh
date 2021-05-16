@@ -4,4 +4,4 @@ FLASK_APP=app.py
 export FLASK_APP=app.py
 python -m flask run
 
-#you will find examples via https://dash-gallery.plotly.host/Portal/
+#you will find first_try via https://dash-gallery.plotly.host/Portal/
