@@ -106,6 +106,7 @@ def update_graph(yaxis_type):
     [Input('my-date-picker-single', 'date')])
 def update_output(date_value):
     string_prefix = 'You have selected: '
+
     if date_value is not None:
         date_object = date.fromisoformat(date_value)
         date_string = date_object.strftime('%B %d, %Y')
