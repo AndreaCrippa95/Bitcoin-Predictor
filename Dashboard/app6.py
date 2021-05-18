@@ -9,12 +9,13 @@ from datetime import date
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 import subprocess
+import numpy as np
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-#path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
+# path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
 
 df = pd.read_csv('data/DataFrame', header=0)
 
@@ -25,33 +26,32 @@ df.columns.values[3] = 'NASDAQ'
 
 fig = go.Figure()
 fig.add_trace(go.Line(x=df["Date"], y=df["BTC Price"],
-                    mode='lines',
-                    name=df.columns.values[1]))
+                      mode='lines',
+                      name=df.columns.values[1]))
 fig.add_trace(go.Line(x=df["Date"], y=df["Gold"],
-                    mode='lines',
-                    name=df.columns.values[2]))
+                      mode='lines',
+                      name=df.columns.values[2]))
 fig.add_trace(go.Line(x=df["Date"], y=df["NASDAQ"],
-                    mode='lines',
-                    name=df.columns.values[3]))
+                      mode='lines',
+                      name=df.columns.values[3]))
 
 app.layout = html.Div([
     html.H1(id='text_header', children=' Welcome to our BTC Forecasting Platform.'),
 
-    dcc.Markdown(id='text_description',children='Text description of the project'),
+    dcc.Markdown(id='text_description', children='Text description of the project'),
 
     html.Br(),
 
     html.Div(["Select commencement date ",
-        dcc.DatePickerSingle(
-        id='input-date',
-        min_date_allowed=date(2010, 1, 1),
-        max_date_allowed=date(2021, 1, 1),
-        initial_visible_month=date(2015, 4, 5),
-        date=date(2021, 1, 1),
-        )]),
+              dcc.DatePickerSingle(
+                  id='input-date',
+                  min_date_allowed=date(2010, 1, 1),
+                  max_date_allowed=date(2021, 1, 1),
+                  initial_visible_month=date(2015, 4, 5),
+                  date=date(2021, 1, 1),
+              )]),
     html.Div(id='output-date'),
     html.Br(),
-
 
     html.Div(["How many days would you like to predict? ",
               dcc.Input(id='my-input', value='100 days', type='text')]),
@@ -60,18 +60,22 @@ app.layout = html.Div([
 
     html.Div(["What model would you like to choose?",
               dcc.Dropdown(id="dropdown_model",
-               options=[
-                 {'label': 'BrownianMotion', 'value': 'BM'},
-                 {'label': 'RandomForestRegressor', 'value': 'RFR'},
-                 {'label': 'GradientBoostingRegressor', 'value': 'GBR'},
-                 {'label': 'LinearRegression', 'value': 'LR'},
-                 {'label': 'Lasso', 'value': 'Lasso'},
-                 {'label': 'KNeighborsRegressor', 'value': 'KNR'},
-                 {'label': 'ElasticNet', 'value': 'EN'},
-                 {'label': 'DecisionTreeRegressor', 'value': 'DTR'},
-                 {'label': 'Sequential', 'value': 'Sequential'}],
-               placeholder=" Please do select a model ")]),
+                           options=[
+                               {'label': 'BrownianMotion', 'value': 'BM'},
+                               {'label': 'RandomForestRegressor', 'value': 'RFR'},
+                               {'label': 'GradientBoostingRegressor', 'value': 'GBR'},
+                               {'label': 'LinearRegression', 'value': 'LR'},
+                               {'label': 'Lasso', 'value': 'Lasso'},
+                               {'label': 'KNeighborsRegressor', 'value': 'KNR'},
+                               {'label': 'ElasticNet', 'value': 'EN'},
+                               {'label': 'DecisionTreeRegressor', 'value': 'DTR'},
+                               {'label': 'Sequential', 'value': 'Sequential'}],
+                           placeholder=" Please do select a model ")]),
     html.Div(id="output-model"),
+
+    html.Div(
+        dcc.Store(id="memory")
+    ),
 
     html.Button('Run', id='button'),
     html.Div(id="RUN"),
@@ -81,45 +85,54 @@ app.layout = html.Div([
 
 ])
 
-#from here onwards you have to define the modification done by the user
+# from here onwards you have to define the modification done by the user
+a = np.array(['end', 'prediction_days', 'BTC_Price', 'Gold_Price', 'NDAQ_Price', 'Model', 'RES', 'GRA', 'ACC'])
+b = np.array([date.today(), 10, True, False, False, 'BM', True, True, True])
+
+df_Input = pd.DataFrame(b, a)
+
 
 @app.callback(
     Output(component_id='output-date', component_property='children'),
     Input(component_id='input-date', component_property='date'))
-
 def update_output_date(date_value):
     if date_value is not None:
-        choosen_date = date_value
-        return ['You have selected "{}"'.format(date_value),choosen_date]
+        df_Input.at['end', 0] = date_value
+        return 'You have selected "{}"'.format(date_value)
+
 
 @app.callback(
-    Output('output-days', 'children'),
+    [Output('output-days', 'children')],
+    [Output('memory', 'data')],
     Input('my-input', 'value'))
-
 def update_output(value):
     prediction_days = value
-    return ['You have selected "{}"'.format(prediction_days),prediction_days]
+    return ['You have selected "{}"'.format(prediction_days), prediction_days]
+
 
 @app.callback(
-    Output('output-model', 'children'),
+    [Output('output-model', 'children')],
+    [Output('memory', 'data')],
     Input('dropdown_model', 'value'))
-
 def update_model(model):
     choosen_model = model
-    return ['You have selected "{}"'.format(choosen_model),choosen_model]
+    return ['You have selected "{}"'.format(choosen_model), choosen_model]
+
 
 @app.callback(
     Output(component_id='RUN', component_property='children'),
-    Input('button', 'n_clicks'),
-    State('output-days','children'),
-    State('output-model','children'),
-    State('output_date','children')
+    [Input('button', 'n_clicks')],
+    [Input('memory', 'data')],
+    State('output-days', 'children'),
+    State('output-model', 'children'),
+    State('output_date', 'children')
 )
-
 def update_output_div():
-    return subprocess.call(['sh', './Shield.sh'])
+    df = pd.DataFrame()
+    return
 
-#from here onwards you have to define on which server you want to define your dash
+
+# from here onwards you have to define on which server you want to define your dash
 
 server = app.server
 if __name__ == '__main__':
