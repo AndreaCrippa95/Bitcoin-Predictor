@@ -37,7 +37,7 @@ elif ChModel in ['DTR']:
 else:
     sys.exit()
 
-df = pd.read_csv('data/DataFrame', index_col=0)
+df = pd.read_csv('../data/DataFrame', index_col=0)
 df.index = df.index.astype('<M8[ns]')
 
 '''

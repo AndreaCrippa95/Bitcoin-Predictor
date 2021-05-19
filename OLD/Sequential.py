@@ -14,7 +14,7 @@ ChModel = Inputs.ChModel
 
 if (ChModel == 'Sequential'):
 
-    df = pd.read_csv('data/DataFrame',index_col=0)
+    df = pd.read_csv('../data/DataFrame', index_col=0)
     df.index = df.index.astype('<M8[ns]')
     #Scaling the data to be between 0 and 1
     scaler = MinMaxScaler(feature_range=(0,1))

@@ -11,14 +11,14 @@ from dash.dependencies import Input, Output
 
 import os
 import sys
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
+path = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor'
 sys.path.append(path)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
+path = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
 df = pd.read_csv(path, header=0)
 
 df.columns.values[0] = 'Date'
@@ -50,9 +50,9 @@ def update_output(date_value):
         date_string = date_object.strftime('%B %d, %Y')
         return date_string
 
-@app.callback(Output('container-button-timestamp', 'children'),
-              Input('btn-nclicks-1', 'n_clicks'),
-
+@app.callback(
+    Output('container-button-timestamp', 'children'),
+    Input('btn-nclicks-1', 'n_clicks'))
 def displayClick(btn1):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'btn-nclicks-1' in changed_id:
