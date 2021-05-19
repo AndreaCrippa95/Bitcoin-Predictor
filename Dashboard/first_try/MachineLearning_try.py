@@ -85,14 +85,19 @@ df = df.dropna()
 
 predictor = df['BTC Price'].shift(-prediction_days)
 
-X = np.array(df)
-X = X[:len(df)-prediction_days]
+X = np.array(df) #x_train
+X = X[:len(df)-prediction_days] #x_test
 
-y = np.array(predictor)
-y = y[:-prediction_days]
+y = np.array(predictor) # y_train
+y = y[:-prediction_days] # y_test
 y = y.reshape(-1,1)
 
 model.fit(X, y.ravel())
 results = model.predict(np.array(df[-prediction_days:]))
 results = results.reshape(-1,1)
-np.savetxt('data/results',results)
+X = np.array(df) #x_train
+X = X[:len(df)-prediction_days] #x_test
+
+y = np.array(predictor) # y_train
+y = y[:-prediction_days] # y_test
+y = y.reshape(-1,1)

@@ -24,13 +24,17 @@ df.columns.values[1] = 'BTC_Price'
 df.columns.values[2] = 'Gold_Price'
 df.columns.values[3] = 'NDAQ_Price'
 
-X = np.array(df)
-X = X[:len(df)-prediction_days]
-predictor = df['BTC_Price'].shift(-prediction_days)
-y = np.array(predictor)
-y = y[:-prediction_days]
+df = df.dropna()
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=40)
+predictor = df['BTC_Price'].shift(-prediction_days)
+
+X_train = np.array(df) #x_train
+X_test = X[:len(df)-prediction_days] #x_test
+
+y_train = np.array(predictor) # y_train
+y_test = y[:-prediction_days] # y_test
+y = y.reshape(-1,1)
+
 
 models = {'Regression': linear_model.LinearRegression,
           'Lasso': linear_model.Lasso,
@@ -61,7 +65,7 @@ def train_and_display(name):
     model = models[name]()
     model.fit(X_train, y_train)
 
-    x_range = np.linspace(X.min(), X.max(), 1000)
+    x_range = np.linspace(X.min(), X.max(), 100)
     y_range = model.predict(x_range.reshape(-1, 1))
 
     fig = go.Figure([
