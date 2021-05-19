@@ -13,7 +13,7 @@ from sklearn.linear_model import Lasso, ElasticNet
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
+path = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
 df = pd.read_csv(path, header=0)
 df.index = df.index.astype('<M8[ns]')
 df = df.dropna()

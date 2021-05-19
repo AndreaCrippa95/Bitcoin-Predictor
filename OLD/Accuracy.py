@@ -36,16 +36,16 @@ if ACC:
         Price = Price.tz_localize(None)
         y = np.array(Price['close'])
 
-    results = pd.read_csv('data/results',header=None)
+    results = pd.read_csv('../data/results', header=None)
     y_pred = np.array(results)
 
     R2D2 = r2_score(y,y_pred)
     Minnie = mean_squared_error(y,y_pred)
     Vodka = mean_absolute_error(y,y_pred)
 
-    print('\nAccuracy:', file=open('data/Accuracy.txt', 'w'))
-    print('-' * 80, file=open('data/Accuracy.txt', 'a'))
-    print('R-squared: %s' % R2D2, file=open('data/Accuracy.txt', 'a'))
-    print('Mean squared error: %s' % Minnie, file=open('data/Accuracy.txt', 'a'))
-    print('Mean absolute error: %s' % Vodka, file=open('data/Accuracy.txt', 'a'))
-    print('-' * 80, file=open('data/Accuracy.txt', 'a'))
+    print('\nAccuracy:', file=open('../data/Accuracy.txt', 'w'))
+    print('-' * 80, file=open('../data/Accuracy.txt', 'a'))
+    print('R-squared: %s' % R2D2, file=open('../data/Accuracy.txt', 'a'))
+    print('Mean squared error: %s' % Minnie, file=open('../data/Accuracy.txt', 'a'))
+    print('Mean absolute error: %s' % Vodka, file=open('../data/Accuracy.txt', 'a'))
+    print('-' * 80, file=open('../data/Accuracy.txt', 'a'))

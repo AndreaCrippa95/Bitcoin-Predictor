@@ -14,7 +14,7 @@ model = Inputs.ChModel
 GRA = Inputs.GRA
 
 if GRA:
-    df = pd.read_csv('data/DataFrame',index_col=0)
+    df = pd.read_csv('../data/DataFrame', index_col=0)
     df.rename(columns ={'BTC Price':'Past Price'}, inplace = True)
     df.index = df.index.astype('<M8[ns]')
     act = pd.DataFrame(df['Past Price'])
@@ -42,7 +42,7 @@ if GRA:
     real = pd.merge(df2,Price['close'], how='outer', left_index=True, right_index=True)
     real.rename(columns ={'close':'Real Price'}, inplace = True)
 
-    results = pd.read_csv('data/results',header=None)
+    results = pd.read_csv('../data/results', header=None)
     results = np.array(results)
     prepred = pd.DataFrame(results, index=date)
     pred = pd.merge(df2,prepred, how='outer', left_index=True, right_index=True)
