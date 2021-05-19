@@ -14,13 +14,13 @@ BTC_Price = True
 Gold_Price = False
 NDAQ_Price = True
 #Choose a model:
-ChModel = 'RFR'
+ChModel = 'SVM'
 #Choose the desired output
 RES = True
 GRA = True
 ACC = True
 
-#Lunching program
+#Launching program
 
 dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price)
 df = dat.create_data()
@@ -31,6 +31,8 @@ elif ChModel =='Sequential':
     res = met.Sequential()
 elif ChModel in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR']:
     res = met.MachineLearning()
+elif ChModel in ['SVM']:
+    res = met.SVM()
 
 gmaker = Results(df,res,ChModel=ChModel,end=end,days=prediction_days)
 if GRA:

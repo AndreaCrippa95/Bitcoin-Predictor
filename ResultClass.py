@@ -71,9 +71,7 @@ class Results:
             Price = Price.tz_localize(None)
             y = np.array(Price['close'])
 
-        results = pd.read_csv('data/results', header=None)
-        y_pred = np.array(results)
-
+        y_pred = np.array(self.result)
         R2D2 = r2_score(y, y_pred)
         Minnie = mean_squared_error(y, y_pred)
         Vodka = mean_absolute_error(y, y_pred)

@@ -1,17 +1,11 @@
-
-import pathlib
 import dash
-import pandas as pd
 from dash.dependencies import Input, Output
 import dash_html_components as html
-from dash.exceptions import PreventUpdate
-import dash_table
 import os
 import sys
 
 pat = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Inputs.py'
 sys.path.append(pat)
-import Inputs
 app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
 )

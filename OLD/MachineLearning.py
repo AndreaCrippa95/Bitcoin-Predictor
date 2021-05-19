@@ -10,10 +10,6 @@ from sklearn.linear_model import ElasticNet
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection  import train_test_split
-from sklearn.model_selection import KFold
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
 import Inputs
 
 #Would like to make this global

@@ -1,12 +1,4 @@
-import glob
-import re
-import pandas as pd
-import numpy as np
 from textblob import TextBlob
-import matplotlib.pyplot as plt
-from sklearn.feature_extraction.text import CountVectorizer
-from newsapi import NewsApiClient
-from Inputs import start, end
 import datanews
 
 datanews.api_key = '0ihqel7juf367d6or4qfijfi6'

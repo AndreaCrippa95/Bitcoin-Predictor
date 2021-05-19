@@ -1,20 +1,15 @@
 import dash
-import flask
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objects as go
-import plotly.express as px
 import pandas as pd
 from datetime import date
-from dash.exceptions import PreventUpdate
-from dash.dependencies import Input, Output
 
-import os
 import sys
 path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
 sys.path.append(path)
 
-import Inputs
+from OLD import Inputs
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 

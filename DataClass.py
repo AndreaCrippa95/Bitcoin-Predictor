@@ -2,11 +2,7 @@
 #Imports:
 import pandas as pd
 import pandas_datareader as web
-import datetime as dt
 import quandl as quandl
-import Inputs
-import sys
-import os
 
 
 #test for fetching data to gitehub

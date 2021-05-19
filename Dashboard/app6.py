@@ -4,36 +4,18 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objects as go
 import plotly.express as px
-import pandas as pd
 from datetime import date
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
-import subprocess
-import numpy as np
+from MethodClass import Method
+from DataClass import  Data
+from ResultClass import Results
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 # path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
-
-df = pd.read_csv('data/DataFrame', header=0)
-
-df.columns.values[0] = 'Date'
-df.columns.values[1] = 'BTC Price'
-df.columns.values[2] = 'Gold'
-df.columns.values[3] = 'NASDAQ'
-
-fig = go.Figure()
-fig.add_trace(go.Line(x=df["Date"], y=df["BTC Price"],
-                      mode='lines',
-                      name=df.columns.values[1]))
-fig.add_trace(go.Line(x=df["Date"], y=df["Gold"],
-                      mode='lines',
-                      name=df.columns.values[2]))
-fig.add_trace(go.Line(x=df["Date"], y=df["NASDAQ"],
-                      mode='lines',
-                      name=df.columns.values[3]))
 
 app.layout = html.Div([
     html.H1(id='text_header', children=' Welcome to our BTC Forecasting Platform.'),
@@ -80,25 +62,16 @@ app.layout = html.Div([
     html.Button('Run', id='button'),
     html.Div(id="RUN"),
 
-    dcc.Graph(id='first_graph',
-              figure=fig)
-
 ])
 
 # from here onwards you have to define the modification done by the user
-a = np.array(['end', 'prediction_days', 'BTC_Price', 'Gold_Price', 'NDAQ_Price', 'Model', 'RES', 'GRA', 'ACC'])
-b = np.array([date.today(), 10, True, False, False, 'BM', True, True, True])
-
-df_Input = pd.DataFrame(b, a)
-
 
 @app.callback(
     Output(component_id='output-date', component_property='children'),
     Input(component_id='input-date', component_property='date'))
 def update_output_date(date_value):
     if date_value is not None:
-        df_Input.at['end', 0] = date_value
-        return 'You have selected "{}"'.format(date_value)
+        return date_value
 
 
 @app.callback(
@@ -106,8 +79,7 @@ def update_output_date(date_value):
     [Output('memory', 'data')],
     Input('my-input', 'value'))
 def update_output(value):
-    prediction_days = value
-    return ['You have selected "{}"'.format(prediction_days), prediction_days]
+    return value
 
 
 @app.callback(
@@ -115,8 +87,7 @@ def update_output(value):
     [Output('memory', 'data')],
     Input('dropdown_model', 'value'))
 def update_model(model):
-    choosen_model = model
-    return ['You have selected "{}"'.format(choosen_model), choosen_model]
+    return model
 
 
 @app.callback(
@@ -128,7 +99,35 @@ def update_model(model):
     State('output_date', 'children')
 )
 def update_output_div():
-    df = pd.DataFrame()
+    start= date(2012,1,1)
+    end = update_output_date()
+    prediction_days = update_output()
+    ChModel = update_model
+    BTC_Price = True
+    Gold_Price = False
+    NDAQ_Price = False
+    GRA = True
+    RES = True
+    ACC = True
+    dat = Data(start=start, end=end, days=prediction_days, BTC=BTC_Price, Gold=Gold_Price, NDAQ=NDAQ_Price)
+    df = dat.create_data()
+    met = Method(df, ChModel=ChModel, days=prediction_days)
+    if ChModel == 'BM':
+        res = met.Brownian_Motion()
+    elif ChModel == 'Sequential':
+        res = met.Sequential()
+    elif ChModel in ['RFR', 'GBR', 'LR', 'Lasso', 'KNR', 'EN', 'DTR']:
+        res = met.MachineLearning()
+    elif ChModel in ['SVM']:
+        res = met.SVM()
+
+    gmaker = Results(df, res, ChModel=ChModel, end=end, days=prediction_days)
+    if GRA:
+        gmaker.Graph()
+    if RES:
+        gmaker.Results()
+    if ACC:
+        gmaker.Accuracy()
     return
 
 
