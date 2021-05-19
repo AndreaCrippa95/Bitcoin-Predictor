@@ -14,7 +14,7 @@ BTC_Price = True
 Gold_Price = False
 NDAQ_Price = True
 #Choose a model:
-ChModel = 'SVM'
+ChModel = 'DNN'
 #Choose the desired output
 RES = True
 GRA = True
@@ -33,6 +33,10 @@ def Launcher():
         res = met.MachineLearning()
     elif ChModel in ['SVM']:
         res = met.SVM()
+    elif ChModel in ['DNN']:
+        res = met.DNN()
+    elif ChModel in ['RNN']:
+        res = met.RNN()
 
     gmaker = Results(df, res, ChModel=ChModel, end=end, days=prediction_days)
     if GRA:

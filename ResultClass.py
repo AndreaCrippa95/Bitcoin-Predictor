@@ -10,10 +10,10 @@ class Results:
     def __init__(self,df,result,ChModel,end,days):
         self.df = df
         self.days = days
-        self.end = end
+        self.end = end + dt.timedelta(1)
         self.result = result
         self.model = ChModel
-        e = self.end + dt.timedelta(self.days - 1)
+        e = self.end + dt.timedelta(self.days-1)
         b = self.end.strftime("%m/%d/%Y")
         c = e.strftime("%m/%d/%Y")
         self.date = pd.date_range(start=b, end=c)
@@ -62,7 +62,8 @@ class Results:
     def Accuracy(self):
         # Merge the closing Price with the already present dataframe keeping in ciunt the date
         y = np.array(self.Price['close'])
-        ext = self.end + dt.timedelta(self.days - 1)
+        y = y[:-1]
+        ext = self.end + dt.timedelta(self.days)
         while len(y) < self.days:
             ext = ext + dt.timedelta(+1)
             Price = web.get_data_tiingo(self.Ticker, self.end.strftime("%Y-%m-%d"), ext.strftime("%Y-%m-%d"),

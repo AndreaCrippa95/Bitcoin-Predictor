@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.linear_model import Lasso
@@ -11,13 +12,16 @@ from sklearn.svm import SVR
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 from Brownian_Motion import Brownian
+from ML_Model import DNN,RNN
+from DataClass import Data
 
 class Method:
 
-    def __init__(self,df,ChModel,days):
+    def __init__(self,df,ChModel,days,Data):
         self.model = ChModel
         self.days = days
         self.df = df
+        self.Data = Data
 
     def MachineLearning(self):
         assert self.model in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR'], "invalid model"
@@ -37,22 +41,13 @@ class Method:
         elif self.model in ['DTR']:
             mod = DecisionTreeRegressor()
 
-        predictor = self.df['BTC Price'].shift(-self.days)
-
-        X = np.array(self.df)
-        X = X[:len(self.df) - self.days]
-
-        y = np.array(predictor)
-        y = y[:-self.days]
-        y = y.reshape(-1, 1)
-
-        mod.fit(X, y.ravel())
-        results = mod.predict(np.array(self.df[-self.days:]))
+        mod.fit(self.Data.X_tr, self.Data.y_tr.ravel())
+        results = mod.predict(self.Data.X_te)
         return results.reshape(-1, 1)
 
     def Sequential(self):
         assert self.model in ['Sequential'], "invalid model"
-        assert self.df.columns < 2, 'Too many variables added for optimal use of this model'
+        #assert self.df.columns < 3, 'Too many variables added for optimal use of this model'
 
         scaler = MinMaxScaler(feature_range=(0, 1))
         scaled_data = scaler.fit_transform(self.df.values.reshape(-1, 1))
@@ -143,3 +138,20 @@ class Method:
         x_forecast = np.array(df.drop(['Prediction'], 1))[-forecast_out:]
         y_pred = svr_rbf.predict(x_forecast)
         return y_pred
+
+    def DNN(self):
+        model = DNN()
+        model.create_model(self.Data)
+        model.train_model(self.Data)
+        res = model.model(self.Data.X_te)
+        res = res.numpy().flatten()
+        return res
+
+    def RNN(self):
+
+        model = RNN()
+        model.create_model(self.Data)
+        model.train_model(self.Data)
+        res = model.model(np.array(self.Data.X_te))
+        res = res.numpy().flatten()
+        return res

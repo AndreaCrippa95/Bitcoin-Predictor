@@ -12,9 +12,9 @@ prediction_days = 10
 #Choose the input data
 BTC_Price = True
 Gold_Price = False
-NDAQ_Price = True
+NDAQ_Price = False
 #Choose a model:
-ChModel = 'SVM'
+ChModel = 'DTR'
 #Choose the desired output
 RES = True
 GRA = True
@@ -23,8 +23,9 @@ ACC = True
 #Launching program
 
 dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price)
-df = dat.create_data()
-met = Method(df,ChModel=ChModel,days=prediction_days)
+dat.create_data()
+df = dat.df
+met = Method(df,ChModel=ChModel,days=prediction_days,Data=dat)
 if ChModel == 'BM':
     res = met.Brownian_Motion()
 elif ChModel =='Sequential':
@@ -33,6 +34,10 @@ elif ChModel in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR']:
     res = met.MachineLearning()
 elif ChModel in ['SVM']:
     res = met.SVM()
+elif ChModel in ['DNN']:
+    res = met.DNN()
+elif ChModel in ['RNN']:
+    res = met.RNN()
 
 gmaker = Results(df,res,ChModel=ChModel,end=end,days=prediction_days)
 if GRA:
