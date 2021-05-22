@@ -14,7 +14,7 @@ BTC_Price = True
 Gold_Price = False
 NDAQ_Price = False
 #Choose a model:
-ChModel = 'DTR'
+ChModel = 'RNN'
 #Choose the desired output
 RES = True
 GRA = True

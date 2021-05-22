@@ -8,6 +8,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
@@ -41,9 +42,25 @@ class Method:
         elif self.model in ['DTR']:
             mod = DecisionTreeRegressor()
 
-        mod.fit(self.Data.X_tr, self.Data.y_tr.ravel())
-        results = mod.predict(self.Data.X_te)
-        return results.reshape(-1, 1)
+        predictor = self.df['BTC Price'].shift(-self.days)
+
+        X_tr = np.array(self.df)
+        X_tr = X_tr[:len(self.df) - self.days]
+        scaler = MinMaxScaler()
+        X_tr = scaler.fit_transform(X_tr)
+
+        y_tr = np.array(predictor)
+        y_tr = y_tr[:-self.days]
+        y_tr = scaler.transform(y_tr.reshape(-1,1))
+
+        X_te = np.array(self.df[-self.days:])
+        X_te = scaler.transform(X_te)
+
+        mod.fit(X_tr, y_tr.ravel())
+        results = mod.predict(X_te.reshape(-1,1))
+        results = results.reshape(-1, 1)
+        results = scaler.inverse_transform(results)
+        return results
 
     def Sequential(self):
         assert self.model in ['Sequential'], "invalid model"

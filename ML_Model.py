@@ -164,7 +164,7 @@ class RNN(DNN):
 
         output_dim = data.y_tr.shape[1]
         # build the network
-        L = [tf.keras.layers.Input(shape=(data.X_te.shape[0],data.X_te.shape[1]))] # very important input layer
+        L = [tf.keras.layers.Input(shape = (data.X_te.shape[1],data.X_te.shape[2]))] # very important input layer
 
         for i, l in enumerate(architecture):
             if i == 0:
