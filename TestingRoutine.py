@@ -5,6 +5,15 @@ from DataClass import Data
 from MethodClass import Method
 from sklearn.metrics import *
 import random
+import matplotlib.pyplot as plt
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import ElasticNet
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
 
 #Importing once the Database to not overload Tiingo
 start = dt.datetime(2012,1,1)
@@ -14,27 +23,30 @@ prediction_days = 10
 BTC_Price = True
 Gold_Price = False
 NDAQ_Price = False
+Returns = False
 #Choose a model:
 ChModel = 'LR'
 #Choose the desired output
 RES = True
 GRA = True
 ACC = True
-dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price)
+dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price,Returns=Returns)
 dat.create_data()
 df = dat.df
-df = pd.DataFrame(df)
-df.index = pd.to_datetime(df.index)
+X_tr = dat.X_tr
+X_te = dat.X_te
+y_tr = dat.y_tr
+#df = pd.DataFrame(df)
+#df.index = pd.to_datetime(df.index)
 #######
-met = Method(df,ChModel=ChModel,days=prediction_days,Data=dat)
-y_pred = met.MachineLearning()
+#met = Method(df,ChModel=ChModel,days=prediction_days,Data=dat)
+#y_pred = met.Sequential()
 ######
 #Randomize starting date:
-R2D2 = []
-Minnie = []
-Vodka = []
+Y_TRUE = []
+Y_PRED = []
 i = 0
-while i < 25:
+while i < 1000:
     start_date = dt.date(2012, 2, 1)
     end_date = dt.date(2020, 12, 31)
 
@@ -45,20 +57,44 @@ while i < 25:
     randomdate = pd.to_datetime(randomdate)
     df2 = df[df.index<randomdate]
     met = Method(df2,ChModel=ChModel,days=prediction_days,Data=dat)
-    y_pred = met.MachineLearning()
+    Y_PRED.append(met.MachineLearning())
 
     rand = randomdate + dt.timedelta(prediction_days)
     df3 = df[df.index<rand].tail(prediction_days)
-    y_true = np.array(df3['BTC Price'])
-
-    R2D2.append(r2_score(y_true, y_pred))
-    Minnie.append(mean_squared_error(y_true, y_pred))
-    Vodka.append(mean_absolute_error(y_true, y_pred))
+    Y_TRUE.append(np.array(df3[df3.columns[0]]))
     i += 1
 
 print('\nAccuracy:')
 print('-' * 80)
-print('R-squared: %s' % np.mean(R2D2))
-print('Mean squared error: %s' % np.mean(Minnie))
-print('Mean absolute error: %s' % np.mean(Vodka))
+print('R-squared: %s' % r2_score(np.array(Y_TRUE).reshape(-1,1),np.array(Y_PRED).reshape(-1,1)))
+print('Mean squared error: %s' % mean_squared_error(np.array(Y_TRUE).reshape(-1,1),np.array(Y_PRED).reshape(-1,1)))
+print('Mean absolute error: %s' % mean_absolute_error(np.array(Y_TRUE).reshape(-1,1),np.array(Y_PRED).reshape(-1,1)))
 print('-' * 80)
+
+
+def eval_on_features2(X_train, X_test, y_train, y_test, regressor):
+    regressor.fit(X_train, y_train)
+    print("Test-set R^2 train: {:.2f}".format(regressor.score(X_train, y_train)))
+    print("Test-set R^2 test: {:.2f}".format(regressor.score(X_test, y_test)))
+    y_pred = regressor.predict(X_test)
+    y_pred_train = regressor.predict(X_train)
+    plt.figure(figsize=(10, 3))
+
+    plt.xticks(pd.date_range(start="01/01/2019", end="31/12/2020", freq='D').astype("int"), rotation=90, ha="left")
+
+    plt.plot(range(len(X_train)), y_train, label="train")
+    plt.plot(range(len(X_train), len(y_test) + len(X_train)), y_test, '-', label="test")
+    plt.plot(range(len(X_train)), y_pred_train, '--', label="prediction train")
+
+    plt.plot(range(len(X_train), len(y_test) + len(X_train)), y_pred, '--', label="prediction test")
+
+    plt.legend(loc=(1.01, 0))
+    plt.xlabel("Date")
+    plt.ylabel("BTC")
+
+for i in np.array([50,100,200,300,400,500]):
+    print("number of estimators: ",i)
+    regressor = GradientBoostingRegressor(n_estimators=i, random_state=0)
+    eval_on_features2(X_tr,X_te,y_tr,y_te,regressor)
+
+

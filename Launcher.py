@@ -10,11 +10,12 @@ start = dt.datetime(2012,1,1)
 end = dt.datetime(2021,5,1)
 prediction_days = 10
 #Choose the input data
-BTC_Price = True
+BTC_Price = False
 Gold_Price = False
 NDAQ_Price = False
+Returns = True
 #Choose a model:
-ChModel = 'RNN'
+ChModel = 'LR'
 #Choose the desired output
 RES = True
 GRA = True
@@ -22,7 +23,7 @@ ACC = True
 
 #Launching program
 
-dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price)
+dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price,Returns=Returns)
 dat.create_data()
 df = dat.df
 met = Method(df,ChModel=ChModel,days=prediction_days,Data=dat)
@@ -38,11 +39,11 @@ elif ChModel in ['DNN']:
     res = met.DNN()
 elif ChModel in ['RNN']:
     res = met.RNN()
+else:
+    raise ValueError
 
 gmaker = Results(df,res,ChModel=ChModel,end=end,days=prediction_days)
 if GRA:
     gmaker.Graph()
 if RES:
     gmaker.Results()
-if ACC:
-    gmaker.Accuracy()
