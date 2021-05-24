@@ -1,0 +1,17 @@
+Model description :
+
+The Brownian motion models for financial markets are based on
+the work ofRobert C. Merton and Paul A. Samuelson, as extensions
+to the one-period market models of Harold Markowitz and William
+F. Sharpe, and are concerned with defining the concepts of
+financial assets and markets, portfolios, gains and wealth in
+terms of continuous-time stochastic processes.
+
+Comments on the predictions :
+
+blablablablablablae
+
+
+Source:
+
+https://en.wikipedia.org/wiki/Brownian_model_of_financial_markets
