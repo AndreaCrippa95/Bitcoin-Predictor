@@ -42,24 +42,10 @@ class Method:
         elif self.model in ['DTR']:
             mod = DecisionTreeRegressor()
 
-        predictor = self.df['BTC Price'].shift(-self.days)
-
-        X_tr = np.array(self.df)
-        X_tr = X_tr[:len(self.df) - self.days]
-        scaler = MinMaxScaler()
-        X_tr = scaler.fit_transform(X_tr)
-
-        y_tr = np.array(predictor)
-        y_tr = y_tr[:-self.days]
-        y_tr = scaler.transform(y_tr.reshape(-1,1))
-
-        X_te = np.array(self.df[-self.days:])
-        X_te = scaler.transform(X_te)
-
-        mod.fit(X_tr, y_tr.ravel())
-        results = mod.predict(X_te.reshape(-1,1))
+        mod.fit(self.Data.X_tr, self.Data.y_tr.ravel())
+        results = mod.predict(self.Data.X_te.reshape(-1,1))
         results = results.reshape(-1, 1)
-        results = scaler.inverse_transform(results)
+        results = self.Data.y_scaler.inverse_transform(results)
         return results
 
     def Sequential(self):
@@ -86,11 +72,11 @@ class Method:
 
         model = Sequential()
 
-        model.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+        model.add(LSTM(units=50,activation='relu', return_sequences=True, input_shape=(X_train.shape[1], 1)))
         model.add(Dropout(0.2))
-        model.add(LSTM(units=50, return_sequences=True))
+        model.add(LSTM(units=50,activation='relu', return_sequences=True))
         model.add(Dropout(0.2))
-        model.add(LSTM(units=50))
+        model.add(LSTM(units=50,activation='relu'))
         model.add(Dropout(0.2))
         # Prediction for the next closing price
         model.add(Dense(units=1))
@@ -119,7 +105,7 @@ class Method:
     def Brownian_Motion(self):
         assert self.model in ['BM'], "invalid model"
 
-        val = self.df['BTC Price']
+        val = self.df[self.df.columns[0]]
         val = val.tail(1)
         a = val.item()
         b = Brownian(s0=a)
@@ -127,34 +113,16 @@ class Method:
 
     def SVM(self):
         assert self.model in ['SVM'], "invalid model"
-
-        df = self.df
-        # A variable for predicting 'n' days out into the future
-        forecast_out = self.days  # 'n=30' days
-        # Create another column (the target ) shifted 'n' units up
-        df['Prediction'] = df[['BTC Price']].shift(-forecast_out)
-        # print the new data set
-        ### Create the independent data set (X)  #######
-        # Convert the dataframe to a numpy array
-        X = np.array(df.drop(['Prediction'], 1))
-        # Remove the last '30' rows
-        X = X[:-forecast_out]
-        ### Create the dependent data set (y)  #####
-        # Convert the dataframe to a numpy array
-        y = np.array(df['Prediction'])
-        # Get all of the y values except the last '30' rows
-        y = y[:-forecast_out]
-        # Split the data into 80% training and 20% testing
-        #x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
+        scaler = MinMaxScaler()
+        scaler.fit(self.Data.X_tr)
         # Create and train the Support Vector Machine (Regressor)
         svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.01)
-        svr_rbf.fit(X, y)
+        svr_rbf.fit(self.Data.X_tr, self.Data.y_tr.ravel())
 
-        # Set x_forecast equal to the last 30 rows of the original data set from Adj. Close column
-        x_forecast = np.array(df.drop(['Prediction'], 1))[-forecast_out:]
-        y_pred = svr_rbf.predict(x_forecast)
-        return y_pred
+        results = svr_rbf.predict(self.Data.X_te)
+        results = results.reshape(-1, 1)
+        results = scaler.inverse_transform(results)
+        return results
 
     def DNN(self):
         model = DNN()

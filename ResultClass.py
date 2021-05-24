@@ -27,11 +27,21 @@ class Results:
         self.Price = self.Price.tz_localize(None)
 
     def Graph(self):
-        self.df.rename(columns={'BTC Price': 'Past Price'}, inplace=True)
-        act = pd.DataFrame(self.df['Past Price'])
-        # Merge the closing Price with the already present dataframe keeping in ciunt the date
-        real = pd.merge(self.df2, self.Price['close'], how='outer', left_index=True, right_index=True)
-        real.rename(columns={'close': 'Real Price'}, inplace=True)
+        # Merge the closing Price with the already present dataframe keeping in the date
+        if self.df.columns[0] in 'BTC Price':
+            real = pd.merge(self.df2, self.Price['close'], how='outer', left_index=True, right_index=True)
+            real.rename(columns={'close': 'Real'}, inplace=True)
+        elif self.df.columns[0] in 'Returns':
+            Returns = []
+            Returns.append(0)
+            for i in range(len(self.date) - 1):
+                Returns.append((self.Price['close'][i + 1] - self.Price['close'][i]) / self.Price['close'][i + 1])
+            real = pd.DataFrame(Returns, index=self.date)
+            real.rename(columns={0: 'Real'}, inplace=True)
+        else:
+            raise ValueError
+        self.df.rename(columns={self.df.columns[0]: 'Past'}, inplace=True)
+        act = pd.DataFrame(self.df['Past'])
         prepred = pd.DataFrame(self.result, index=self.date)
         pred = pd.merge(self.df2, prepred, how='outer', left_index=True, right_index=True)
         pred.rename(columns={0: 'Prediction'}, inplace=True)
@@ -43,9 +53,9 @@ class Results:
         fig, ax = plt.subplots()
         Final.plot(ax=ax)
         ax.legend(loc='upper left')
-        ax.set_title('Bitcoin Price ' + str(self.model))
+        ax.set_title('Bitcoin ' + str(self.model))
         plt.show()
-        fig.savefig('Graphs/Bitcoin_Price' + str(self.model) + '.png')
+        fig.savefig('Graphs/Bitcoin_' + str(self.model) + '.png')
         plt.close(fig)
 
     def Results(self):
@@ -54,32 +64,7 @@ class Results:
         pred.rename(columns={0: 'Prediction'}, inplace=True)
 
         print('\nResults:', file=open('data/Result.txt', 'w'))
-        print('{:<10}{:>13}'.format('Date', 'BTC Price'), file=open('data/Result.txt', 'a'))
+        print('{:<10}{:>13}'.format('Date', 'BTC'), file=open('data/Result.txt', 'a'))
         print('-' * 80, file=open('data/Result.txt', 'a'))
         print(pred['Prediction'], file=open('data/Result.txt', 'a'))
         print('-' * 80, file=open('data/Result.txt', 'a'))
-
-    def Accuracy(self):
-        # Merge the closing Price with the already present dataframe keeping in ciunt the date
-        y = np.array(self.Price['close'])
-        y = y[:-1]
-        ext = self.end + dt.timedelta(self.days)
-        while len(y) < self.days:
-            ext = ext + dt.timedelta(+1)
-            Price = web.get_data_tiingo(self.Ticker, self.end.strftime("%Y-%m-%d"), ext.strftime("%Y-%m-%d"),
-                                        api_key=('eef2cf8be7666328395f2702b5712e533ea072b9'))
-            Price = Price.droplevel('symbol')
-            Price = Price.tz_localize(None)
-            y = np.array(Price['close'])
-
-        y_pred = np.array(self.result)
-        R2D2 = r2_score(y, y_pred)
-        Minnie = mean_squared_error(y, y_pred)
-        Vodka = mean_absolute_error(y, y_pred)
-
-        print('\nAccuracy:', file=open('data/Accuracy.txt', 'w'))
-        print('-' * 80, file=open('data/Accuracy.txt', 'a'))
-        print('R-squared: %s' % R2D2, file=open('data/Accuracy.txt', 'a'))
-        print('Mean squared error: %s' % Minnie, file=open('data/Accuracy.txt', 'a'))
-        print('Mean absolute error: %s' % Vodka, file=open('data/Accuracy.txt', 'a'))
-        print('-' * 80, file=open('data/Accuracy.txt', 'a'))
