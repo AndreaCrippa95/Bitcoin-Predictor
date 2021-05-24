@@ -10,7 +10,7 @@ start = dt.datetime(2012,1,1)
 end = dt.datetime(2021,5,1)
 prediction_days = 10
 #Choose the input data
-BTC_Price = False
+BTC_Price = True
 Gold_Price = False
 NDAQ_Price = False
 Returns = True
