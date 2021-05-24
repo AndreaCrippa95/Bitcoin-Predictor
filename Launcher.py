@@ -13,7 +13,7 @@ prediction_days = 10
 BTC_Price = True
 Gold_Price = False
 NDAQ_Price = False
-Returns = True
+Returns = False
 #Choose a model:
 ChModel = 'LR'
 #Choose the desired output

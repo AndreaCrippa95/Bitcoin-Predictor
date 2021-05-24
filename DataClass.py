@@ -19,7 +19,7 @@ class Data:
         self.Gold_Price = Gold
         self.NDAQ_Price = NDAQ
         self.Returns = Returns
-        self.TestMode = False
+        self.TestMode = True
 
         self.X_tr = None
         self.X_te = None
@@ -50,6 +50,7 @@ class Data:
             Price.to_csv('data/Price')
         else:
             Price = pd.read_csv('data/Price')
+            Price['date'] = Price['date'].astype('<M8[ns]')
         self.df = pd.merge(self.df, Price['close'], how='outer', left_index=True, right_index=True)
         self.df.rename(columns={'close': 'BTC Price'}, inplace=True)
 
