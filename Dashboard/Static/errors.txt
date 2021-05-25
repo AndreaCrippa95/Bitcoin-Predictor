@@ -1,0 +1,25 @@
+can only concatenate str (not "list") to str
+can only concatenate str (not "list") to str
+can only concatenate str (not "list") to str
+name 'input_value' is not defined
+name 'input_value' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
