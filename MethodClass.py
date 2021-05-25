@@ -43,7 +43,7 @@ class Method:
             mod = DecisionTreeRegressor()
 
         mod.fit(self.Data.X_tr, self.Data.y_tr.ravel())
-        results = mod.predict(self.Data.X_te.reshape(-1,1))
+        results = mod.predict(self.Data.X_te)
         results = results.reshape(-1, 1)
         results = self.Data.y_scaler.inverse_transform(results)
         return results

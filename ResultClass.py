@@ -18,13 +18,21 @@ class Results:
         c = e.strftime("%m/%d/%Y")
         self.date = pd.date_range(start=b, end=c)
         self.df2 = pd.DataFrame(index=self.date)
-        self.Ticker = 'btcusd'
-        self.Price = web.get_data_tiingo(self.Ticker, end.strftime("%Y-%m-%d"), e.strftime("%Y-%m-%d"),
+        self.TestMode = True
+        if not self.TestMode:
+            self.Ticker = 'btcusd'
+            Price = web.get_data_tiingo(self.Ticker, end.strftime("%Y-%m-%d"), e.strftime("%Y-%m-%d"),
                                     api_key=('eef2cf8be7666328395f2702b5712e533ea072b9'))
         # Drops multilevel index from the Tiingo dataframe
-        self.Price = self.Price.droplevel('symbol')
+            Price = Price.droplevel('symbol')
         # Drops TimeZone sensitivity from the Tiingo dataframe
-        self.Price = self.Price.tz_localize(None)
+            Price = Price.tz_localize(None)
+            Price.to_csv('data/Price2')
+            self.Price = Price
+        else:
+            self.Price = pd.read_csv('data/Price2')
+            self.Price['date'] = self.Price['date'].astype('<M8[ns]')
+            self.Price.index = self.Price['date']
 
     def Graph(self):
         # Merge the closing Price with the already present dataframe keeping in the date
