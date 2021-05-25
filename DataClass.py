@@ -5,7 +5,7 @@ import pandas_datareader as web
 import quandl as quandl
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-
+import datetime as dt
 
 #test for fetching data to gitehub
 
@@ -51,6 +51,8 @@ class Data:
         else:
             Price = pd.read_csv('data/Price')
             Price['date'] = Price['date'].astype('<M8[ns]')
+            Price.index = Price['date']
+
         self.df = pd.merge(self.df, Price['close'], how='outer', left_index=True, right_index=True)
         self.df.rename(columns={'close': 'BTC Price'}, inplace=True)
 
@@ -85,6 +87,9 @@ class Data:
 
         #Remove Na values
         self.df = self.df.dropna()
+
+        if self.TestMode:
+                self.df = self.df[self.df.index <= self.end]
 
         if not self.BTC_Price:
             self.df = self.df.drop(columns='BTC Price')

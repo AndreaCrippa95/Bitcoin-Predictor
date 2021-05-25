@@ -5,19 +5,11 @@ from DataClass import Data
 from MethodClass import Method
 from sklearn.metrics import *
 import random
-import matplotlib.pyplot as plt
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.linear_model import Lasso
-from sklearn.linear_model import ElasticNet
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.linear_model import LinearRegression
 
 #Importing once the Database to not overload Tiingo
 start = dt.datetime(2012,1,1)
-end = dt.date.today()
+end = dt.datetime(2021,5,1)
 prediction_days = 10
 #Choose the input data
 BTC_Price = True
@@ -28,14 +20,14 @@ Returns = False
 ChModel = 'LR'
 #Choose the desired output
 RES = True
-GRA = True
-ACC = True
+GRA = False
+
 dat = Data(start=start,end=end,days=prediction_days,BTC=BTC_Price,Gold=Gold_Price,NDAQ=NDAQ_Price,Returns=Returns)
 dat.create_data()
 df = dat.df
-X_tr = dat.X_tr
-X_te = dat.X_te
-y_tr = dat.y_tr
+#X_tr = dat.X_tr
+#X_te = dat.X_te
+#y_tr = dat.y_tr
 #df = pd.DataFrame(df)
 #df.index = pd.to_datetime(df.index)
 #######
@@ -55,8 +47,12 @@ while i < 1000:
     random_number_of_days = random.randrange(days_between_dates)
     randomdate = start_date + dt.timedelta(days=random_number_of_days)
     randomdate = pd.to_datetime(randomdate)
-    df2 = df[df.index<randomdate]
-    met = Method(df2,ChModel=ChModel,days=prediction_days,Data=dat)
+    randomdate = randomdate.to_pydatetime()
+
+    dat2 = Data(start_date,randomdate,prediction_days,BTC_Price,Gold_Price,NDAQ_Price,Returns)
+    dat2.create_data()
+    df2 = dat2.df
+    met = Method(df2,ChModel=ChModel,days=prediction_days,Data=dat2)
     Y_PRED.append(met.MachineLearning())
 
     rand = randomdate + dt.timedelta(prediction_days)
@@ -71,7 +67,7 @@ print('Mean squared error: %s' % mean_squared_error(np.array(Y_TRUE).reshape(-1,
 print('Mean absolute error: %s' % mean_absolute_error(np.array(Y_TRUE).reshape(-1,1),np.array(Y_PRED).reshape(-1,1)))
 print('-' * 80)
 
-
+'''
 def eval_on_features2(X_train, X_test, y_train, y_test, regressor):
     regressor.fit(X_train, y_train)
     print("Test-set R^2 train: {:.2f}".format(regressor.score(X_train, y_train)))
@@ -97,4 +93,4 @@ for i in np.array([50,100,200,300,400,500]):
     regressor = GradientBoostingRegressor(n_estimators=i, random_state=0)
     eval_on_features2(X_tr,X_te,y_tr,y_te,regressor)
 
-
+'''

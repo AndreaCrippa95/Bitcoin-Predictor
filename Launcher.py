@@ -7,7 +7,7 @@ import datetime as dt
 
 #set start, end times and number of days predicted in the future
 start = dt.datetime(2012,1,1)
-end = dt.datetime(2021,5,1)
+end = dt.datetime(2021,5,24)
 prediction_days = 10
 #Choose the input data
 BTC_Price = True
