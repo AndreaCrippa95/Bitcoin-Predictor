@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from datetime import datetime
+from datetime import datetime as dt
 import sqlite3
 
 import dash
@@ -36,6 +36,8 @@ df.columns.values[3] = 'NDAQ_Price'
 prediction_days = 100
 Real_Price = df.loc[:,'BTC_Price']
 
+#import coinmarketcap_api as capi
+
 #Descriptions
 path1 = os.path.join('/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/Descriptions/BM.txt')
 
@@ -63,7 +65,6 @@ fig.add_trace(go.Line(x=df["Date"], y=df["Gold_Price"],
 fig.add_trace(go.Line(x=df["Date"], y=df["NDAQ_Price"],
                     mode='lines',
                     name=df.columns.values[3]))
-fig.layout.plot_bgcolor = '#fff'
 
 app.layout = html.Div(style={'backgroundColor': 'white', 'color': 'black'},
                     children=[
@@ -88,7 +89,11 @@ app.layout = html.Div(style={'backgroundColor': 'white', 'color': 'black'},
                      'our dataframe has three main columns, the BTC_Price'
                      'the Gold_Price and finally the NASDAQ Price.'
                     ,style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
-
+    dcc.RadioItems(
+                id='yaxis-type',
+                options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
+                value='Linear',
+                labelStyle={'display': 'inline-block'}),
     dcc.Graph(
             style={'width': '500', 'backgroundColor': 'white'},
             id='overview_graph',
@@ -269,7 +274,7 @@ app.layout = html.Div(style={'backgroundColor': 'white', 'color': 'black'},
 @app.callback(Output('my-graph', 'figure'),
               [Input('my-dropdown', 'value')])
 def update_graph(selected_dropdown_value):
-    df = web.DataReader(selected_dropdown_value,'yahoo',datetime(2015, 1, 1),datetime.now())
+    df = web.DataReader(selected_dropdown_value,'yahoo',dt(2015, 1, 1),dt.now())
     return {
         'data': [{
             'x': df.index,
@@ -278,8 +283,16 @@ def update_graph(selected_dropdown_value):
         'layout': {'margin': {'l': 40, 'r': 0, 't': 20, 'b': 30}}
     }
 
+@app.callback(
+    [Output(component_id='overview_graph', component_property='fig')],
+    [Input(component_id='yaxis-type', component_property='value')])
+
+def update_graph(yaxis_type):
+    fig.update_yaxes(type='linear' if yaxis_type == 'Linear' else 'log')
+    return fig
+
 '''
-For the Descriptions
+# For the Descriptions
 @app.callback(
     [Output(component_id='text-display',component_property='children')],
     [Input(component_id='text-input',component_property='value')])
@@ -361,8 +374,6 @@ def update_scatter(symbol, n_clicks):
               }
 
     return figure
-
-# Twitter Feed, works with SQL DB that you have to run in advance. --> please, do refer to our Readme.md
 
 @app.callback(Output(component_id='input-div', component_property='children'),
               [Input(component_id='submit-button', component_property='n_clicks')],

@@ -23,3 +23,10 @@ name 'plotly' is not defined
 name 'plotly' is not defined
 name 'plotly' is not defined
 name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
+name 'plotly' is not defined
