@@ -18,7 +18,7 @@ class Results:
         c = e.strftime("%m/%d/%Y")
         self.date = pd.date_range(start=b, end=c)
         self.df2 = pd.DataFrame(index=self.date)
-        self.TestMode = True
+        self.TestMode = False
         if not self.TestMode:
             self.Ticker = 'btcusd'
             Price = web.get_data_tiingo(self.Ticker, end.strftime("%Y-%m-%d"), e.strftime("%Y-%m-%d"),
@@ -30,9 +30,11 @@ class Results:
             Price.to_csv('data/Price2')
             self.Price = Price
         else:
-            self.Price = pd.read_csv('data/Price2')
+            self.Price = pd.read_csv('data/Price')
             self.Price['date'] = self.Price['date'].astype('<M8[ns]')
             self.Price.index = self.Price['date']
+            self.Price = self.Price[self.Price.index <= e]
+            self.Price = self.Price[self.Price.index >= self.end]
 
     def Graph(self):
         # Merge the closing Price with the already present dataframe keeping in the date

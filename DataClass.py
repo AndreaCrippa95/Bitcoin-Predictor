@@ -19,7 +19,7 @@ class Data:
         self.Gold_Price = Gold
         self.NDAQ_Price = NDAQ
         self.Returns = Returns
-        self.TestMode = True
+        self.TestMode = False
 
         self.X_tr = None
         self.X_te = None
@@ -58,18 +58,29 @@ class Data:
 
         #GOLD
         if self.Gold_Price:
+            if not self.TestMode:
             #Gold prices from Quandl, I suppose AM is open and PM is close?
-            Gold = quandl.get("LBMA/GOLD", authtoken="Ti1UcxgbNyuqmB78s14S",start_date=c, end_date=d)
-
+                Gold = quandl.get("LBMA/GOLD", authtoken="Ti1UcxgbNyuqmB78s14S",start_date=c, end_date=d)
+                Gold.to_csv('data/Gold')
+            else:
+                Gold = pd.read_csv('data/Gold')
+                Gold['Date'] = Gold['Date'].astype('<M8[ns]')
+                Gold.index = Gold['Date']
             self.df = pd.merge(self.df,Gold['USD (PM)'], how='outer', left_index=True, right_index=True)
 
         #S&P
         if self.NDAQ_Price:
-            Ticker = 'ndaq'
+            if not self.TestMode:
+                Ticker = 'ndaq'
 
-            NDAQ = web.get_data_tiingo(Ticker,c,d, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
-            NDAQ = NDAQ.droplevel('symbol')
-            NDAQ = NDAQ.tz_localize(None)
+                NDAQ = web.get_data_tiingo(Ticker,c,d, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
+                NDAQ = NDAQ.droplevel('symbol')
+                NDAQ = NDAQ.tz_localize(None)
+                NDAQ.to_csv('data/NDAQ')
+            else:
+                NDAQ = pd.read_csv('data/NDAQ')
+                NDAQ['date'] = NDAQ['date'].astype('<M8[ns]')
+                NDAQ.index = NDAQ['date']
             self.df = pd.merge(self.df,NDAQ['close'], how='outer', left_index=True, right_index=True)
             self.df.rename(columns ={'close':'NDAQ Price'}, inplace = True)
 

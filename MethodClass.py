@@ -11,7 +11,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, LSTM
+from tensorflow.keras.layers import Dense, Dropout, LSTM, Input
 from Brownian_Motion import Brownian
 from ML_Model import DNN,RNN
 from DataClass import Data
@@ -125,18 +125,20 @@ class Method:
         return results
 
     def DNN(self):
-        model = DNN()
-        model.create_model(self.Data)
-        model.train_model(self.Data)
-        res = model.model(self.Data.X_te)
-        res = res.numpy().flatten()
-        return res
+        X_train = np.reshape(self.Data.X_tr, (self.Data.X_tr.shape[0], self.Data.X_tr.shape[1], 1))
+        X_test= np.reshape(self.Data.X_te, (self.Data.X_te.shape[0], self.Data.X_te.shape[1], 1))
+        y_train = np.reshape(self.Data.y_tr, (self.Data.y_tr.shape[0], self.Data.y_tr.shape[1], 1))
 
-    def RNN(self):
+        output_dim = y_train.shape[1]
+        model = Sequential()
+        model.add(Input(shape=(X_test.shape[1], X_test.shape[2]))) # very important input layer
+        model.add(LSTM(64, activation='relu'))
+        model.add(Dense(32))
+        model.add(Dense(16))
+        model.add(Dense(output_dim))
+        model.compile(loss='mean_squared_error', optimizer='adam')
+        model.fit(X_train, y_train, epochs=15, batch_size=16)
 
-        model = RNN()
-        model.create_model(self.Data)
-        model.train_model(self.Data)
-        res = model.model(np.array(self.Data.X_te))
-        res = res.numpy().flatten()
-        return res
+        results = model.predict(X_test)
+        results = self.Data.y_scaler.inverse_transform(results)
+        return results
