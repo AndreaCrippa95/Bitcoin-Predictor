@@ -10,7 +10,7 @@ seaborn==0.8.1
 #This is if fbprophet does not install alone
 conda install -c anaconda ephem
 conda install -c conda-forge pystan
-y
+
 pandas
 dash
 fbprophet
