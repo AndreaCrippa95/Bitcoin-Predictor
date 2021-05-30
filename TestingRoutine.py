@@ -100,3 +100,15 @@ for h in range(5,20,5):
         print('-' * 80, file=open('Testing_Routine_Results.txt', 'a'))
 
 
+#######################################################
+#Tuning
+from sklearn.linear_model import Lasso,ElasticNet,LinearRegression
+
+
+model = Lasso()
+model.fit(dat.X_tr,dat.y_tr)
+model.predict(dat.X_te)
+
+model = LinearRegression()
+model.fit(dat.X_tr,dat.y_tr)
+model.predict(dat.X_te)
