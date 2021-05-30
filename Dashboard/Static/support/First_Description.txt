@@ -1,0 +1,6 @@
+Abstract - The objective of our project is to develop a dashboard
+that would allow us to visualize the Bitcoin's short-term price prediction.
+We have created different methods to study if any of those methods can better
+predict the price in the short term. From an RNN to a BM, our statistical
+model compares the different methods that we used.
+We the help of the module DASH, we have succeeded to

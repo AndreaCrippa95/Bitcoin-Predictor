@@ -1,0 +1,11 @@
+Model description :
+
+Brownian motion progression. We developed a model based on what learned
+on the first part of the class of Fixed Income and we therefore developed
+a little algorithm that perform a Brownian motion based on the Weiner process.
+Since this is one of the main used methods in finance to simulate the path of
+a stock, we decided to adopt it as our base model as it is based on a random process.
+
+Source:
+
+wikipedia.org

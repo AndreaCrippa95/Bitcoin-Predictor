@@ -1,0 +1,9 @@
+Model description :
+
+K Neighbors Regressor. The input consists of the k closest training examples
+in data set. The output is the property value for the object. This value is
+the average of the values of k nearest neighbors.
+
+Source:
+
+wikipedia.org

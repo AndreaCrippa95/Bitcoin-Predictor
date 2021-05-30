@@ -1,0 +1,13 @@
+Model description :
+
+Gradient Boosting Regressor. produces a prediction model in the form of
+an ensemble of weak prediction models, typically decision trees. When a
+decision tree is the weak learner, the resulting algorithm is called
+gradient boosted trees, which usually outperforms random forest. It builds
+the model in a stage-wise fashion like other boosting methods do, and it
+generalizes them by allowing optimization of
+an arbitrary differentiable loss function.
+
+Source:
+
+wikipedia.org

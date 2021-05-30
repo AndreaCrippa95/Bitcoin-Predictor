@@ -1,7 +1,7 @@
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
-import json , time
+import json, time
 import sqlite3
 from unidecode import unidecode
 from textblob import TextBlob
@@ -10,25 +10,30 @@ from textblob import TextBlob
 conn = sqlite3.connect('twitter.db')
 c = conn.cursor()
 
-API = 'ih1vfWmIgXNN36iUdtkRA8SNd'
-API_secret = 'vZeS0JWBNnaMCLjVVtwEMIFANLTcI5oC1P9N6dpyt4YF4MFPPY'
-Access = '103961010-lpTQz31OQJRrm5HNClnJg52JABCbCgDEuglpEMew'
-Access_secret = 'YxLpi9IcdnydwfCMXecUYZD3z90kYL5WFD8YAH5rUejWm'
+import sys
+import os
+path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/admin'
+sys.path.append(path)
+import references as ref
 
+API = ref.API
+API_secret = ref.API_secret
+Access = ref.Access
+Access_secret = ref.Access_secret
 
-def create_table():
+def table():
     try:
         c.execute("CREATE TABLE IF NOT EXISTS sentiment(unix REAL, tweet TEXT, sentiment REAL)")
         c.execute("CREATE INDEX fast_unix ON sentiment(unix)")
         c.execute("CREATE INDEX fast_tweet ON sentiment(tweet)")
         c.execute("CREATE INDEX fast_sentiment ON sentiment(sentiment)")
         conn.commit()
-    except Exception as e:
-        print(str(e))
+    except:
+        pass
 
-create_table()
+table()
 
-class listener(StreamListener):
+class twitter_listener(StreamListener):
 
     def on_data(self, data):
         try:
@@ -42,19 +47,16 @@ class listener(StreamListener):
                       (time_ms, tweet, sentiment))
             conn.commit()
 
-        except KeyError as e:
-            print(str(e))
+        except:
+            pass
         return(True)
-
-    def on_error(self, status):
-        print (status)
 
 while True:
     try:
         auth = OAuthHandler(API, API_secret)
         auth.set_access_token(Access, Access_secret)
-        twitterStream = Stream(auth, listener())
-        twitterStream.filter(track=["a","e","i","o","u"])
-    except Exception as e:
-        print(str(e))
+        twitterStream = Stream(auth, twitter_listener())
+        twitterStream.filter(track=['a','e','i','o','u'])
+    except:
+        pass
         time.sleep(5)

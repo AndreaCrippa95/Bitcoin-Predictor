@@ -1,0 +1,9 @@
+Model description:
+
+Sequential Neural Network. class of artificial neural networks where
+connections between nodes form a directed graph along a temporal sequence.
+This allows it to exhibit temporal dynamic behavior.
+
+Source:
+
+wikipedia.org

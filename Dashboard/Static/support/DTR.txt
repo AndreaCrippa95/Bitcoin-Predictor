@@ -1,0 +1,9 @@
+Model description :
+
+Decision Tree Regressor. It uses a decision tree (as a predictive model)
+to go from observations about an item (represented in the branches) to
+conclusions about the item's target value (represented in the leaves).
+
+Source:
+
+wikipedia.org
