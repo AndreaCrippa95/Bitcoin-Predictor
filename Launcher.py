@@ -7,19 +7,18 @@ import datetime as dt
 
 #set start, end times and number of days predicted in the future
 start = dt.datetime(2012,1,1)
-end = dt.datetime(2021,5,24)
+end = dt.datetime(2021,5,1)
 prediction_days = 10
 #Choose the input data
 BTC_Price = True
-Gold_Price = False
-NDAQ_Price = False
-Returns = False
+Gold_Price = True
+NDAQ_Price = True
+Returns = True
 #Choose a model:
-ChModel = 'LR'
+ChModel = 'DNN'
 #Choose the desired output
 RES = True
 GRA = True
-ACC = True
 
 #Launching program
 
@@ -29,7 +28,7 @@ df = dat.df
 met = Method(df,ChModel=ChModel,days=prediction_days,Data=dat)
 if ChModel == 'BM':
     res = met.Brownian_Motion()
-elif ChModel =='Sequential':
+elif ChModel == 'Sequential':
     res = met.Sequential()
 elif ChModel in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR']:
     res = met.MachineLearning()
@@ -37,8 +36,6 @@ elif ChModel in ['SVM']:
     res = met.SVM()
 elif ChModel in ['DNN']:
     res = met.DNN()
-elif ChModel in ['RNN']:
-    res = met.RNN()
 else:
     raise ValueError
 
