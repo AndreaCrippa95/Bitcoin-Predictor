@@ -1,0 +1,9 @@
+Model description :
+
+Random Forest Regressor. Random decision forests correct for decision trees'
+habit of overfitting to their training set.
+
+Source:
+
+wikipedia.org
+

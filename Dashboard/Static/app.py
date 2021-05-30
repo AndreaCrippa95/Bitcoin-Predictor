@@ -1,7 +1,9 @@
 import os
+import sys
 import pandas as pd
 from datetime import datetime
 import sqlite3
+import base64
 
 import dash
 import dash_core_components as dcc
@@ -13,19 +15,76 @@ from pandas_datareader import data as web
 import yfinance as yf
 from fbprophet import Prophet
 
-import graphs as gr
-import texts as tx
+import support.graphs as gr
+import support.texts as tx
+import random
+import time
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+####################################################################################################
+# 001 - JS & CSS, Layout
+####################################################################################################
 
+# Java
+external_scripts = [
+    'https://www.google-analytics.com/analytics.js',
+    {'src': 'https://cdn.polyfill.io/v2/polyfill.min.js'},
+    {
+        'src': 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.js',
+        'integrity': 'sha256-Qqd/EfdABZUcAxjOkMi8eGEivtdTkh3b65xCZL4qAQA=',
+        'crossorigin': 'anonymous'
+    }
+]
+
+# CSS
+external_stylesheets = [
+    'https://codepen.io/chriddyp/pen/bWLwgP.css',
+    {
+        'href': 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css',
+        'rel': 'stylesheet',
+        'integrity': 'sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO',
+        'crossorigin': 'anonymous'
+    }
+]
+
+# Chosen colors
 colors = {
     'text':"#7FDBFF",
     'left':"#E86361",
     'right':"#3A82B5"
 }
+####################################################################################################
+# 002 - Necessary references and options
+####################################################################################################
 
-# Dataset
+options=[
+            {'label': 'Bitcoin', 'value': 'BTC-USD'},
+            {'label': 'Ethereum', 'value': 'ETH-USD'},
+            {'label': 'Tether ', 'value': 'USDT-USD'},
+            {'label': 'Binance ', 'value': 'BNB-USD'},
+            {'label': 'Cardano', 'value': 'ADA-USD'},
+            {'label': 'Ripple', 'value': 'XRP-USD'},
+            {'label': 'Dogecoin', 'value': 'DOGE-USD'},
+            {'label': 'USD Coin', 'value': 'USDC-USD'},
+            {'label': 'Polkadot', 'value': 'DOT-USD'},
+            {'label': 'Polygon', 'value': 'MATIC-USD'},
+            {'label': 'Moon ETP', 'value': 'MOON.SW'}
+        ]
+
+list_of_ourgraphs = [
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceBM.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceDNN.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceDTR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceEN.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceGBR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceKNR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceLasso.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceLR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceRFR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceSequential.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceSVM.png'
+        ]
+
+# DF Graph
 file_path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
 df = pd.read_csv(file_path, header=0)
 df.columns.values[0] = 'Date'
@@ -35,284 +94,337 @@ df.columns.values[3] = 'NDAQ_Price'
 
 prediction_days = 100
 Real_Price = df.loc[:,'BTC_Price']
-
-#Descriptions
-path1 = os.path.join('/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/Descriptions/BM.txt')
-
-
-# Options via yahoo finance ticker
-
-options=[
-            {'label': 'Bitcoin', 'value': 'BTC-USD'},
-            {'label': 'Ripple', 'value': 'XRP-USD'},
-            {'label': 'Matic', 'value': 'MATIC-USD'},
-            {'label': 'Binance ', 'value': 'BNB-USD'},
-            {'label': 'Moon', 'value': 'MOON.SW'},
-            {'label': 'Etheureum', 'value': 'ETH-USD'},
-            {'label': 'Litecoin', 'value': 'LTC-USD'}
-        ]
-
-#Graphs
 fig = go.Figure()
-fig.add_trace(go.Line(x=df["Date"], y=df["BTC_Price"],
-                    mode='lines',
-                    name=df.columns.values[1]))
-fig.add_trace(go.Line(x=df["Date"], y=df["Gold_Price"],
-                    mode='lines',
-                    name=df.columns.values[2]))
-fig.add_trace(go.Line(x=df["Date"], y=df["NDAQ_Price"],
-                    mode='lines',
-                    name=df.columns.values[3]))
+fig.add_trace(go.Scatter(x=df["Date"],
+                            y=df["BTC_Price"],
+                                mode='lines',
+                                    name=df.columns.values[1],
+                                        line=dict(color='rgb(5, 108, 159)')))
+fig.add_trace(go.Scatter(x=df["Date"],
+                            y=df["Gold_Price"],
+                                mode='lines',
+                                    name=df.columns.values[2],
+                                        line=dict(color='gold')))
+fig.add_trace(go.Scatter(x=df["Date"],
+                            y=df["NDAQ_Price"],
+                                mode='lines',
+                                    name=df.columns.values[3],
+                                        line=dict(color='red')))
 fig.layout.plot_bgcolor = '#fff'
-
-app.layout = html.Div(style={'backgroundColor': 'white', 'color': 'black'},
-                    children=[
-
-    html.H1(children='Welcome to our Dashboard',style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
-    html.H5(children='To refresh the graphs and predictions, please do refer to our Readme.md file',style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
-
-    dcc.Dropdown(
-        id='my-dropdown',
-        options=options,
-        value='BTC-USD'
-    ),
-    dcc.Graph(id='my-graph', style={'width': '500'}),
+fig.update_layout(paper_bgcolor = 'rgba(0,0,0,0)',
+                    plot_bgcolor = 'rgba(0,0,0,0)',
+                        xaxis = {'showgrid': True},
+                            yaxis = {'showgrid': True},
+                                yaxis_zeroline=True,
+                                    xaxis_zeroline=True)
 
 
-    dcc.Markdown(tx.First_desc_markdown,style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
+####################################################################################################
+# 003 - APP Start
+####################################################################################################
+
+app = dash.Dash(__name__,
+                external_scripts=external_scripts,
+                    external_stylesheets=external_stylesheets)
+
+
+app.layout = html.Div(children=[
+
+        html.H1(children='WELCOME TO OUR DASHBOARD',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                           }
+                ),
+    html.Br(),
+
+        html.H3(children='Project designed by Andrea CRIPPA, Maximilian SETZER , Flavio ROJO.'
+                         ,style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                                 }
+                ),
 
     html.Br(),
-    html.H2(children='Actual Data and Graphs.',style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
-    html.H5(children='This is the graphic representation of our DataFrame, '
-                     'which comprises the data collected since 2013 till today, '
-                     'our dataframe has three main columns, the BTC_Price'
-                     'the Gold_Price and finally the NASDAQ Price.'
-                    ,style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
 
-    dcc.Graph(
-            style={'width': '500', 'backgroundColor': 'white'},
-            id='overview_graph',
-            figure=fig),
+        dcc.Markdown('COPY THE ABSTRACT HERE'
+                     ,style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                             }
+                     ),
 
     html.Br(),
-    html.H2(id='text_results', children= 'The Results parts',style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
 
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.BM_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-   dcc.Markdown(
-        tx.BM_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.EN_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.EN_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.GBR_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.GBR_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.KNR_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.KNR_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.Lasso_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.Lasso_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.LR_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.LR_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.RFR_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.RFR_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.Seq_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
-
-    dcc.Markdown(
-        tx.Sequential_txt_markdown,
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
-
-    html.Img(
-        src='data:image/png;base64,{}'.format(gr.SVm_png64),
-        height=300,
-        style={'display': 'inline-block', 'vertical-align': 'middle'},
-        alt='The image can not be displayed try later.'),
+        html.H2(children='CHARTS SECTION',
+                style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                       }
+                ),
 
     html.Br(),
-    html.H2(children='Statistical analysis of our models',style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
 
-    dcc.Markdown(
-        '''*This text will be in italic*''',
-        style={'display': 'inline-block', 'vertical-align': 'middle'}),
+        html.H5('Select your cryptocurrency, from Yahoo Finance'),
 
-    html.Div(children=[
-        html.H2(children='Crypto price forecasting chart web application framework for Python.'),
-        html.H3('Enter a stock symbol:'),
+        dcc.Dropdown(id='dropdown_symbol',
+                        options=options,
+                            value='BTC-USD',
+                                multi=False
+                    ),
 
-            dcc.Dropdown(
-                id='dropdown_symbol',
-                options=options,
-                value='BTC-USD',
-                multi=False
+        html.Div(
+                  dcc.DatePickerRange(id='date_range',
+                                        min_date_allowed=datetime(2015, 1, 1),
+                                            max_date_allowed=datetime.now(),
+                                                start_date=datetime(2019, 1, 1),
+                                                    end_date=datetime.now(),
+                                                        number_of_months_shown=2
+                                      ),
+
+                        style={'display': 'inline-block','font-family': 'Helvetica'
+                              }
+                ),
+        html.Div([
+            html.Button(id='submit_button',
+                            n_clicks=0,
+                                children='Submit',
+                                     style={'fontSize': 10, 'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                                            }
+                        )
+                ],
+                        style={'display': 'inline-block'
+                               }
+                ),
+
+        html.H3(children='CLOSING VALUE GRAPH',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                           }
+                ),
+
+        dcc.Graph(id='graph_scatter'
+                ),
+
+        html.H3(children='CANDLESTICK GRAPH',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                        }
+                ),
+
+        dcc.Graph(id='graph_candle'
+                ),
+
+        html.H3(children='TRADING VOLUME GRAPH',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                       }
+                ),
+
+        dcc.Graph(id='graph_volume'
+                 ),
+
+        html.H3(children='COMPARABLE GRAPH',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                           }
+                ),
+
+        dcc.Graph(id='overview_graph',
+                     figure=fig
+                  ),
+
+    html.Br(),
+
+        html.H2(children='ADA PROJECT RESULTS SECTION',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                           }
+                ),
+
+    html.Br(),
+        dcc.Markdown('COPY THE ABSTRACT HERE',
+                     style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                            }
+                     ),
+    html.Br(),
+
+    html.Br(),
+        dcc.Dropdown(id='graph_dropdown_BTC_price',
+                    options=[{'label': i, 'value': i} for i in list_of_ourgraphs],
+                        value=list_of_ourgraphs[0],
+                            placeholder="Select a method",
+
+                ),
+
+        html.Img(id='BTC_image',
+                    alt='The image can not be displayed try later.',
+                        style={'text-align': 'center', 'display': 'inline-block', 'width': '100%',
+                            'max-width': '800px','vertical-align': 'middle', 'horizontal-align':'middle'}
+                 ),
+
+    html.Br(),
+
+    html.Br(),
+
+        html.H2(children='CRYPTO FORECAST VIA FBPROPHET',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                           }
+                ),
+
+    html.Br(),
+
+            html.H5('Select your cryptocurrency, from Yahoo Finance'),
+                dcc.Dropdown(id='dropdown_symbol_2',
+                        options=options,
+                            value='BTC-USD',
+                                multi=False,
+
             ),
 
-            html.Div([
-                html.Button(id='submit_button',
+        html.Div([
+            html.Button(id='submit_button_2',
                             n_clicks=0,
-                            children='Submit'),
-                dcc.Graph(
-                    id='graph_scatter')
-                    ])
-]),
+                                style={'display': 'inline-block','font-family': 'Helvetica'},
+                                    children='Submit'
+                        )
+                 ],
+                    style={'display': 'inline-block'}),
 
-    html.H2(children='Live Twitter Sentiment', style={'textAlign': 'center','color': 'grey','font-family': 'Helvetica'}),
+        dcc.Graph(id='graph_scatter_2'
+                ),
 
-    html.Div([
-    html.Div(
-        className = 'container-fluid',
-        children =[html.H2('Live Twitter Sentiment', className = 'header-title')],
-        ),
-    html.Div(
-        className = 'row search',
-        children = [
-            html.Div(
-                className = 'col-md-4 mb-4',
-                children = [html.H5('SearchTerm :', className = 'keyword')]
-                     ),
-            html.Div(
-                className = 'col-md-4 mb-4',
-                children = [
-                    dcc.Input(id='sentiment_term', className = 'form-control', value='Twitter', type='text'),
-                    html.Div(['example'], id='input-div', style={'display': 'none'}),
+    html.Br(),
+
+        html.H2(children='TWITTER SENTIMENT',
+                    style={'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                           }
+                        ),
+
+    html.Br(),
+
+        html.Div(children = [
+                        dcc.Input(id='sentiment_term', value='Bitcoin', type='text'),
+                            html.Div(id='input-div', style={'color': 'rgb(255,255,255)'}
+                        )
                     ]
                 ),
-            html.Div(
-                className = 'col-md-4 mb-4',
-                children = [
-                    html.Button('Submit', id="submit-button" ,className = 'btn btn-success'),
+        html.Div(children = [
+                        html.Button('Submit', id="submit-button"
+                        )
                     ]
                 ),
-            ]
-        ),
-    html.Div(
-        className = 'row',
-        children = [
-            html.Div(
-                className = 'col-md-8 mb-8',
-                children = [
-                    dcc.Graph(id='live-graph', animate=False),
-                    ]
-                ),
-            html.Div(
-                className = 'col-md-4 mb-4',
-                children = [
-                    dcc.Graph(id='sentiment-pie', animate=False),
+        html.Div(children = [
+                        html.Div(children = [
+                            dcc.Graph(id='live-graph', animate=False
+                        )
                     ]
                 ),
             ]
         ),
 
-      dcc.Interval(id='graph-update',
-                   interval=1*1000
-                ),
-            ]
-     )
-])
+        dcc.Interval(id='graph-update',
+                       interval=1*1000
+                    )
+                ]
+            )
 
-# For the Graphs
+####################################################################################################
+# 004 - Callbacks
+####################################################################################################
 
-@app.callback(Output('my-graph', 'figure'),
-              [Input('my-dropdown', 'value')])
-def update_graph(selected_dropdown_value):
-    df = web.DataReader(selected_dropdown_value,'yahoo',datetime(2015, 1, 1),datetime.now())
-    return {
-        'data': [{
-            'x': df.index,
-            'y': df.Close
-        }],
-        'layout': {'margin': {'l': 40, 'r': 0, 't': 20, 'b': 30}}
-    }
-
-'''
-For the Descriptions
+# Closing-price Graph
 @app.callback(
-    [Output(component_id='text-display',component_property='children')],
-    [Input(component_id='text-input',component_property='value')])
+    Output(component_id='graph_scatter', component_property='figure'),
+    [Input(component_id='dropdown_symbol', component_property='value'),
+     Input(component_id='date_range', component_property='start_date'),
+     Input(component_id='date_range', component_property='end_date'),
+     Input(component_id='submit_button', component_property='n_clicks')])
+def update_scatter(symbol, start_date, end_date, n_clicks):
+    if n_clicks == 0:
+        ticker_data = yf.Ticker('BTC-USD')
+        df = ticker_data.history(period='1d', start=datetime(2017, 1, 1), end=datetime.now())
 
+    else:
+        ticker_data = yf.Ticker(symbol)
+        df = ticker_data.history(period='1d', start=start_date, end=end_date)
 
-def update_text_output_2(input_value):
-    with open(path1, 'r') as Texlist1:
-        content = Texlist1.read()
-    return content
-'''
+    first = go.Scatter(x=df.index,
+                       y=df['Close'])
 
-### Prediction part
+    data = [first]
 
+    figure = {'data': data}
+    return figure
+
+# candlestick Graph
 @app.callback(
-    Output('graph_scatter', 'figure'),
-    [Input('dropdown_symbol', 'value'),
-     Input('submit_button', 'n_clicks')])
+    Output(component_id='graph_candle', component_property='figure'),
+    [Input(component_id='dropdown_symbol', component_property='value'),
+     Input(component_id='date_range', component_property='start_date'),
+     Input(component_id='date_range', component_property='end_date'),
+     Input(component_id='submit_button', component_property='n_clicks')])
+def update_graph(symbol, start_date, end_date, n_clicks):
+    if n_clicks == 0:
+        ticker_data = yf.Ticker('BTC-USD')
+        df = ticker_data.history(period='1d', start=datetime(2015, 1, 1), end=datetime.now())
+
+    else:
+        ticker_data = yf.Ticker(symbol)
+        df = ticker_data.history(period='1d', start=start_date, end=end_date)
+
+    first = go.Candlestick(x=df.index,
+                            open=df['Open'],
+                                high=df['High'],
+                                    low=df['Low'],
+                                        close=df['Close'])
+
+    data = [first]
+
+    figure = {'data': data}
+    return figure
+
+# Volume Graph
+@app.callback(
+    Output(component_id='graph_volume', component_property='figure'),
+    [Input(component_id='dropdown_symbol', component_property='value'),
+     Input(component_id='date_range', component_property='start_date'),
+     Input(component_id='date_range', component_property='end_date'),
+     Input(component_id='submit_button', component_property='n_clicks')])
+def update_scatter(symbol, start_date, end_date, n_clicks):
+    if n_clicks == 0:
+        ticker_data = yf.Ticker('BTC-USD')
+        df = ticker_data.history(period='1d', start=datetime(2015, 1, 1), end=datetime.now())
+
+    else:
+        ticker_data = yf.Ticker(symbol)
+        df = ticker_data.history(period='1d', start=start_date, end=end_date)
+
+    first = go.Scatter(x=df.index,
+                       y=df['Volume'])
+
+    data = [first]
+
+    figure = {'data': data}
+
+    return figure
+
+
+# Results Dropdown
+@app.callback(
+    Output(component_id='BTC_image', component_property='src'),
+    [Input(component_id='graph_dropdown_BTC_price',component_property= 'value')])
+def update_image_src(image_path):
+    print('current image_path = {}'.format(image_path))
+    encoded_image = base64.b64encode(open(image_path, 'rb').read())
+    return 'data:image/png;base64,{}'.format(encoded_image.decode())
+
+
+# Prediction via FBProphet
+@app.callback(
+    Output(component_id='graph_scatter_2', component_property='figure'),
+    [Input(component_id='dropdown_symbol_2', component_property='value'),
+     Input(component_id='submit_button_2', component_property='n_clicks')])
 def update_scatter(symbol, n_clicks):
     if n_clicks == 0:
         ticker_data = yf.Ticker('BTC-USD')
         df = ticker_data.history(period='1d', start=datetime(2015, 1, 1), end=datetime.now())
 
     else:
-        #columns = ['Open', 'High', 'Low', 'Close', 'Volume']
         ticker_data = yf.Ticker(symbol)
         df = ticker_data.history(period='1d', start=datetime(2015, 1, 1), end=datetime.now())
 
     prophet_df = df.copy()
     prophet_df.reset_index(inplace=True)
-    # Renaming needed for fbprophet to make predictions
     prophet_df = prophet_df.rename(columns={"Date": "ds", "Close": "y"})
 
-    # Call Prophet() to make prediction up to 100 days
     forcast_columns = ['yhat', 'yhat_lower', 'yhat_upper']
     m = Prophet()
     m.fit(prophet_df)
@@ -324,60 +436,56 @@ def update_scatter(symbol, n_clicks):
 
     historic = go.Scatter(
         x=df.index,
-        y=df["Close"],
-        name="Data values"
+            y=df["Close"],
+                name="Historic value"
     )
 
     yhat = go.Scatter(
         x=forecast1.index,
-        y=forecast1["yhat"],
-        mode='lines',
-        name="Forecast"
+            y=forecast1["yhat"],
+            mode='lines',
+                line=dict(color='rgb(230,0,0)'),
+                    name="Forecast line"
     )
 
     yhat_upper = go.Scatter(
         x=forecast1.index,
-        y=forecast1["yhat_upper"],
-        mode='lines',
-        fill="tonexty",
-        line={"color": "#57b8ff"},
-        name="Higher uncertainty interval"
+            y=forecast1["yhat_upper"],
+                mode='lines',
+                    fill="tonexty",
+                        line=dict(color='rgb(128,170,255)'),
+                            name="High uncertainty"
     )
 
     yhat_lower = go.Scatter(
         x=forecast1.index,
-        y=forecast1["yhat_lower"],
-        mode='lines',
-        fill="tonexty",
-        line={"color": "#57b8ff"},
-        name="Lower uncertainty interval"
+            y=forecast1["yhat_lower"],
+                mode='lines',
+                    fill="tonexty",
+                        line=dict(color='rgb(0,170,204)'),
+                            name="Low uncertainty"
     )
 
     data = [historic, yhat, yhat_upper, yhat_lower]
 
-    figure = {'data': data,
-              'layout': {
-                  'title': str(symbol) + " closing value"}
-              }
+    figure = {'data': data}
 
     return figure
 
-# Twitter Feed, works with SQL DB that you have to run in advance. --> please, do refer to our Readme.md
-
+# Twitter sentiment
 @app.callback(Output(component_id='input-div', component_property='children'),
               [Input(component_id='submit-button', component_property='n_clicks')],
               state=[State(component_id='sentiment_term', component_property='value')])
-
 def update_div(n_clicks, input_value):
     return input_value
 
-@app.callback(Output(component_id='live-graph',component_property= 'figure'),
-              [Input(component_id='graph-update', component_property= 'interval'),
+@app.callback(Output(component_id='live-graph', component_property='figure'),
+              [Input(component_id='graph-update', component_property='interval'),
                Input(component_id='input-div', component_property='children')])
 
 def update_graph_scatter(n, input_value):
     try:
-        conn = sqlite3.connect('twitter.db')
+        conn = sqlite3.connect('Twitter/twitter.db')
         c = conn.cursor()
         df = pd.read_sql("SELECT * FROM sentiment WHERE tweet LIKE ? ORDER BY unix DESC LIMIT 1000", conn ,params=('%' + input_value + '%',))
         df.sort_values('unix', inplace=True)
@@ -392,25 +500,22 @@ def update_graph_scatter(n, input_value):
         X = df.index
         Y = df.sentiment_smoothed
 
-        data = plotly.graph_objs.Scatter(
-                x=X,
-                y=Y,
-                name='Scatter',
-                mode= 'lines+markers'
-                )
+        data = go.Scatter(x=X,
+                             y=Y,
+                                name='Scatter',
+                                    mode= 'lines+markers'
+                        )
 
-        return {'data': [data],'layout' : go.Layout(xaxis=dict(range=[min(X),max(X)]),
-                                                    yaxis=dict(range=[min(Y),max(Y)]),
-                                                    title='{}'.format(input_value))}
+        return {'data': [data],'layout' : go.Layout(
+                                                xaxis=dict(range=[min(X),max(X)]),
+                                                        yaxis=dict(range=[min(Y),max(Y)]))}
 
-    except Exception as e:
-        with open('errors.txt','a') as f:
-            f.write(str(e))
-            f.write('\n')
+    except:
+        pass
 
+####################################################################################################
+# 005 - Server displays
+####################################################################################################
 
-server = app.server
 if __name__ == '__main__':
-    app.run_server(
-        port = 8060,
-        host ='0.0.0.0')
+    app.run_server(debug=True)

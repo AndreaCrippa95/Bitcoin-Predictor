@@ -1,0 +1,31 @@
+All the articles that helped us create our dashboard :
+    https://datascienceparichay.com/article/get-data-from-twitter-api-in-python-step-by-step-guide/
+    https://blog.shrimpy.io/blog/how-to-make-a-crypto-trading-bot-using-python
+    https://towardsdatascience.com/cryptocurrency-prediction-with-lstm-4cc369c43d1b?gi=7a6202cb225c
+    https://towardsdatascience.com/technical-indicators-on-bitcoin-using-python-c392b4a33810
+    https://towardsdatascience.com/data-quality-dashboard-9c60f72b245c
+    https://towardsdatascience.com/how-to-scrape-a-dashboard-with-python-8b088f6cecf3
+    https://towardsdatascience.com/step-by-step-twitter-sentiment-analysis-in-python-d6f650ade58d
+    https://stats.seandolinar.com/collecting-twitter-data-using-a-python-stream-listener/
+    https://towardsdatascience.com/an-easy-introduction-to-sql-for-data-scientists-83363ae004b9
+    and of course, the entire library of https://plotly.com
+
+All the youtube videos that helped us create our dashboard :
+    Python Tutorial: Working with JSON Data using the json Module
+    https://www.youtube.com/watch?v=9N6a-VLBa2I
+    The Dash Callback - Input, Output, State, and more
+    https://www.youtube.com/watch?v=mTsZL-VmRVE
+    Introduction to Dash Plotly Dynamic Callbacks
+    https://www.youtube.com/watch?v=4gDwKYaA6ww
+
+All the Github accounts that helped us create our dashboard :
+    https://github.com/leehanchung/btc_dash
+    https://github.com/panditanvita/BTCpredictor
+    https://github.com/STATWORX/blog/tree/master/DashApp
+    https://github.com/leehanchung/btc_dash/tree/master/btc_predictor
+    https://github.com/sudharsan13296/Bitcoin-price-Prediction-using-LSTM
+    https://github.com/msaleem18/Bitcoin-Price-Prediction-LSTM
+    https://github.com/Aaron-Paul/Bitcoin-Price-Twitter-Sentiment-Analysis
+    https://github.com/SanjoShaju/Cryptocurrency-Analysis-Python
+    _*one day we will succeeded to replicate such a project*_
+        https://github.com/Bitcoin-Price-Prediction/btcpredictor

@@ -1,0 +1,8 @@
+Model description :
+
+Linear regression. The simplest regression model and often the most precise.
+Another very important baseline to compare other methods with.
+
+Source:
+
+wikipedia.org

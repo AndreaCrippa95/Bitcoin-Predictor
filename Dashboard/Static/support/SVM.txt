@@ -1,0 +1,17 @@
+Model description :
+
+Support Vector Regressor. Given a set of training examples, each
+marked as belonging to one of two categories, an SVM training
+algorithm builds a model that assigns new examples to one category
+or the other, making it a non-probabilistic binary linear classifier.
+SVM maps training examples to points in space so as to maximise the
+width of the gap between the two categories. New examples are then
+mapped into that same space and predicted to belong to a category
+based on which side of the gap they fall. In addition to performing
+linear classification, SVMs can efficiently perform a non-linear
+classification using what is called the kernel trick, implicitly mapping
+their inputs into high-dimensional feature spaces.
+
+Source:
+
+wikipedia.org

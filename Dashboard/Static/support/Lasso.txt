@@ -1,0 +1,13 @@
+Model description :
+
+Lasso. Least absolute shrinkage and selection operator, regression
+analysis method that performs both variable selection and regularization
+in order to enhance the prediction accuracy and interpretability
+of the resulting statistical model
+
+Source:
+
+wikipedia.org
+
+
+
