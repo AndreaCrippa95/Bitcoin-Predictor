@@ -15,9 +15,11 @@ class Results:
             f = int(f)
             g = end[5:7]
             g = int(g)
-            h = end[8:]
+            h = end[8:10]
             h = int(h)
             end = dt.datetime(f,g,h)
+            self.end = end + dt.timedelta(1)
+        else:
             self.end = end + dt.timedelta(1)
         self.result = result
         self.model = ChModel
@@ -26,7 +28,7 @@ class Results:
         c = e.strftime("%m/%d/%Y")
         self.date = pd.date_range(start=b, end=c)
         self.df2 = pd.DataFrame(index=self.date)
-        self.TestMode = True
+        self.TestMode = False
         if not self.TestMode:
             self.Ticker = 'btcusd'
             Price = web.get_data_tiingo(self.Ticker, end.strftime("%Y-%m-%d"), e.strftime("%Y-%m-%d"),
