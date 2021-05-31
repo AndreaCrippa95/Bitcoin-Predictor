@@ -275,12 +275,11 @@ app.layout = html.Div(children=[
                 ),
 
         html.Div(
-                          dcc.DatePickerRange(id='date_range_ADA',
-                                                min_date_allowed=datetime(2015, 1, 1),
-                                                    max_date_allowed=datetime.now(),
-                                                        start_date=datetime(2019, 1, 1),
-                                                            end_date=datetime.now(),
-                                                                number_of_months_shown=2
+                          dcc.DatePickerSingle(id='date_range_ADA',
+                                               min_date_allowed=datetime(2012, 2, 1),
+                                               max_date_allowed=datetime.today(),
+                                               initial_visible_month=datetime.today(),
+                                               date=datetime.today()
                                               ),
 
                                 style={'display': 'inline-block','font-family': 'Helvetica'
@@ -468,11 +467,10 @@ def update_scatter(symbol, start_date, end_date, n_clicks):
     Output(component_id='BTC_image', component_property='src'),
     [Input(component_id='graph_dropdown_BTC_price',component_property= 'value'),
      Input(component_id='graph_dropdown_BTC_choice',component_property='value'),
-     Input(component_id='date_range_ADA', component_property='start_date'),
-     Input(component_id='date_range_ADA', component_property='end_date'),
+     Input(component_id='date_range_ADA', component_property='date'),
      Input(component_id='dropdown_days', component_property='value'),
      Input(component_id='submit_button_ADA', component_property='n_clicks')])
-def update_image_src(method,variables,start_date,end_date,pred_days,n_clicks):
+def update_image_src(method,variables,end_date,pred_days,n_clicks):
     if 'BTC Price' in variables:
         BTC = True
     else:
@@ -531,9 +529,9 @@ def update_image_src(method,variables,start_date,end_date,pred_days,n_clicks):
         ChModel = 'BR'
 
     prediction_days = int(pred_days)
-
+    start_date = datetime(2012, 1, 1)
     if n_clicks == 0:
-        print(start_date,end_date)
+        time.sleep(1)
     else:
         dat = Data(start=start_date, end=end_date, days=prediction_days, BTC=BTC, Gold=Gold, NDAQ=NDAQ,
                    Returns=Returns)

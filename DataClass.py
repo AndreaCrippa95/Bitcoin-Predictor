@@ -19,7 +19,7 @@ class Data:
         self.Gold_Price = Gold
         self.NDAQ_Price = NDAQ
         self.Returns = Returns
-        self.TestMode = True
+        self.TestMode = False
 
         self.X_tr = None
         self.X_te = None
