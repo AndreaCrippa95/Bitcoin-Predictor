@@ -32,17 +32,17 @@ app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets)
 
 list_of_ourgraphs = [
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceBM.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceDNN.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceDTR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceEN.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceGBR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceKNR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceLasso.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceLR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceRFR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceSequential.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceSVM.png'
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_BM.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_DNN.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_DTR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_EN.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_GBR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_KNR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_Lasso.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_LR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_RFR.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_Sequential.png',
+        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_SVM.png'
 ]
 
 

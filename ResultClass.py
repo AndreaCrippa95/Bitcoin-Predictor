@@ -10,7 +10,15 @@ class Results:
     def __init__(self,df,result,ChModel,end,days):
         self.df = df
         self.days = days
-        self.end = end + dt.timedelta(1)
+        if type(end)==str:
+            f = end[:4]
+            f = int(f)
+            g = end[5:7]
+            g = int(g)
+            h = end[8:]
+            h = int(h)
+            end = dt.datetime(f,g,h)
+            self.end = end + dt.timedelta(1)
         self.result = result
         self.model = ChModel
         e = self.end + dt.timedelta(self.days-1)
@@ -27,10 +35,10 @@ class Results:
             Price = Price.droplevel('symbol')
         # Drops TimeZone sensitivity from the Tiingo dataframe
             Price = Price.tz_localize(None)
-            Price.to_csv('data/Price2')
+            Price.to_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Price2')
             self.Price = Price
         else:
-            self.Price = pd.read_csv('data/Price')
+            self.Price = pd.read_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Price')
             self.Price['date'] = self.Price['date'].astype('<M8[ns]')
             self.Price.index = self.Price['date']
             self.Price = self.Price[self.Price.index <= e]
@@ -65,7 +73,7 @@ class Results:
         ax.legend(loc='upper left')
         ax.set_title('Bitcoin ' + str(self.model))
         plt.show()
-        fig.savefig('Graphs/Bitcoin_' + str(self.model) + '.png')
+        fig.savefig('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_' + str(self.model) + '.png')
         plt.close(fig)
 
     def Results(self):
@@ -73,8 +81,8 @@ class Results:
         pred = pd.merge(self.df2, prepred, how='outer', left_index=True, right_index=True)
         pred.rename(columns={0: 'Prediction'}, inplace=True)
 
-        print('\nResults:', file=open('data/Result.txt', 'w'))
-        print('{:<10}{:>13}'.format('Date', 'BTC'), file=open('data/Result.txt', 'a'))
-        print('-' * 80, file=open('data/Result.txt', 'a'))
-        print(pred['Prediction'], file=open('data/Result.txt', 'a'))
-        print('-' * 80, file=open('data/Result.txt', 'a'))
+        print('\nResults:', file=open('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Result.txt', 'w'))
+        print('{:<10}{:>13}'.format('Date', 'BTC'), file=open('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Result.txt', 'a'))
+        print('-' * 80, file=open('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Result.txt', 'a'))
+        print(pred['Prediction'], file=open('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Result.txt', 'a'))
+        print('-' * 80, file=open('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Result.txt', 'a'))

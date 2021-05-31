@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 
 from pandas_datareader import data as web
 import yfinance as yf
-from fbprophet import Prophet
+#from fbprophet import Prophet
 
 import support.graphs as gr
 import support.texts as tx
@@ -21,7 +21,7 @@ import time
 
 import os
 import sys
-path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor'
+path = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor'
 sys.path.append(path)
 
 #Import Data making class, Method caller class and Result maker class

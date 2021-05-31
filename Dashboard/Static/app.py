@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 import sqlite3
 import base64
+import time
 
 import dash
 import dash_core_components as dcc
@@ -19,6 +20,10 @@ import support.graphs as gr
 import support.texts as tx
 import random
 import time
+
+from DataClass import Data
+from MethodClass import Method
+from ResultClass import Results
 
 ####################################################################################################
 # 001 - JS & CSS, Layout
@@ -71,21 +76,39 @@ options=[
         ]
 
 list_of_ourgraphs = [
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceBM.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceDNN.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceDTR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceEN.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceGBR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceKNR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceLasso.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceLR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceRFR.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceSequential.png',
-        '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_PriceSVM.png'
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_BM.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_DNN.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_DTR.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_EN.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_GBR.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_KNR.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_Lasso.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_LR.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_RFR.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_Sequential.png',
+        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_SVM.png'
         ]
 
+list_of_our_methods = [
+    'Brownian Motion',
+    'Linear Regression',
+    'Lasso',
+    'Elastic Net',
+    'K-neighbour Regressor',
+    'Decision Tree Regressor',
+    'Random Forest Regressor',
+    'Gradient Boosting Regressor',
+    'Support Vector Machine Regressor',
+    'Sequential Neural Network',
+    'Dense Neural Network'
+]
+
+list_of_our_days = [5,10,15,20]
+
+list_of_our_variables = ['BTC Price', 'Gold Price', 'NASDAQ Price','BTC Returns']
+
 # DF Graph
-file_path = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
+file_path = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
 df = pd.read_csv(file_path, header=0)
 df.columns.values[0] = 'Date'
 df.columns.values[1] = 'BTC_Price'
@@ -238,11 +261,54 @@ app.layout = html.Div(children=[
 
     html.Br(),
         dcc.Dropdown(id='graph_dropdown_BTC_price',
-                    options=[{'label': i, 'value': i} for i in list_of_ourgraphs],
-                        value=list_of_ourgraphs[0],
+                    options=[{'label': i, 'value': i} for i in list_of_our_methods],
+                        value=list_of_our_methods[0],
                             placeholder="Select a method",
 
                 ),
+        dcc.Dropdown(id='graph_dropdown_BTC_choice',
+                    options=[{'label': i, 'value': i} for i in list_of_our_variables],
+                        value=list_of_our_variables[0],
+                            placeholder="Select some variables",
+                                multi=True
+
+                ),
+
+        html.Div(
+                          dcc.DatePickerRange(id='date_range_ADA',
+                                                min_date_allowed=datetime(2015, 1, 1),
+                                                    max_date_allowed=datetime.now(),
+                                                        start_date=datetime(2019, 1, 1),
+                                                            end_date=datetime.now(),
+                                                                number_of_months_shown=2
+                                              ),
+
+                                style={'display': 'inline-block','font-family': 'Helvetica'
+                                      }
+                        ),
+
+        dcc.Dropdown(id='dropdown_days',
+                         options=[
+                             {'label': '5 days', 'value': 5},
+                             {'label': '10 days', 'value': 10},
+                             {'label': '15 days', 'value': 15},
+                             {'label': '20 days', 'value': 20}
+                         ],
+                                    value=5,
+                                        multi=False
+                            ),
+
+        html.Div([
+                    html.Button(id='submit_button_ADA',
+                                    n_clicks=0,
+                                        children='Submit',
+                                             style={'fontSize': 10, 'textAlign': 'center','color': colors,'font-family': 'Helvetica'
+                                                    }
+                                )
+                        ],
+                                style={'display': 'inline-block'
+                                       }
+                        ),
 
         html.Img(id='BTC_image',
                     alt='The image can not be displayed try later.',
@@ -400,8 +466,97 @@ def update_scatter(symbol, start_date, end_date, n_clicks):
 # Results Dropdown
 @app.callback(
     Output(component_id='BTC_image', component_property='src'),
-    [Input(component_id='graph_dropdown_BTC_price',component_property= 'value')])
-def update_image_src(image_path):
+    [Input(component_id='graph_dropdown_BTC_price',component_property= 'value'),
+     Input(component_id='graph_dropdown_BTC_choice',component_property='value'),
+     Input(component_id='date_range_ADA', component_property='start_date'),
+     Input(component_id='date_range_ADA', component_property='end_date'),
+     Input(component_id='dropdown_days', component_property='value'),
+     Input(component_id='submit_button_ADA', component_property='n_clicks')])
+def update_image_src(method,variables,start_date,end_date,pred_days,n_clicks):
+    if 'BTC Price' in variables:
+        BTC = True
+    else:
+        BTC = False
+
+    if 'Gold Price' in variables:
+        Gold = True
+    else:
+        Gold = False
+
+    if 'NASDAQ Price' in variables:
+        NDAQ = True
+    else:
+        NDAQ = False
+
+    if 'BTC Returns' in variables:
+        Returns = True
+    else:
+        Returns = False
+
+    if method == 'Brownian Motion':
+        image_path = list_of_ourgraphs[0]
+        ChModel = 'BR'
+    elif method == 'Linear Regression':
+        image_path = list_of_ourgraphs[7]
+        ChModel = 'LR'
+    elif method == 'Lasso':
+        image_path = list_of_ourgraphs[6]
+        ChModel = 'Lasso'
+    elif method == 'Elastic Net':
+        image_path = list_of_ourgraphs[3]
+        ChModel = 'EN'
+    elif method == 'K-neighbour Regressor':
+        image_path = list_of_ourgraphs[5]
+        ChModel = 'KNR'
+    elif method == 'Decision Tree Regressor':
+        image_path = list_of_ourgraphs[2]
+        ChModel = 'DTR'
+    elif method == 'Random Forest Regressor':
+        image_path = list_of_ourgraphs[8]
+        ChModel = 'RFR'
+    elif method == 'Gradient Boosting Regressor':
+        image_path = list_of_ourgraphs[4]
+        ChModel = 'GBR'
+    elif method == 'Support Vector Machine Regressor':
+        image_path = list_of_ourgraphs[10]
+        ChModel = 'SVR'
+    elif method == 'Sequential Neural Network':
+        image_path = list_of_ourgraphs[9]
+        ChModel = 'Sequential'
+    elif method == 'Dense Neural Network':
+        image_path = list_of_ourgraphs[1]
+        ChModel = 'DNN'
+    else:
+        image_path = list_of_ourgraphs[0]
+        ChModel = 'BR'
+
+    prediction_days = int(pred_days)
+
+    if n_clicks == 0:
+        print(start_date,end_date)
+    else:
+        dat = Data(start=start_date, end=end_date, days=prediction_days, BTC=BTC, Gold=Gold, NDAQ=NDAQ,
+                   Returns=Returns)
+        dat.create_data()
+        df = dat.df
+        met = Method(df, ChModel=ChModel, days=prediction_days, Data=dat)
+        if ChModel == 'BM':
+            res = met.Brownian_Motion()
+        elif ChModel == 'Sequential':
+            res = met.Sequential()
+        elif ChModel in ['RFR', 'GBR', 'LR', 'Lasso', 'KNR', 'EN', 'DTR']:
+            res = met.MachineLearning()
+        elif ChModel in ['SVM']:
+            res = met.SVM()
+        elif ChModel in ['DNN']:
+            res = met.DNN()
+        else:
+            raise ValueError
+
+        gmaker = Results(df, res, ChModel=ChModel, end=end_date, days=prediction_days)
+        gmaker.Graph()
+
+    time.sleep(10)
     print('current image_path = {}'.format(image_path))
     encoded_image = base64.b64encode(open(image_path, 'rb').read())
     return 'data:image/png;base64,{}'.format(encoded_image.decode())
