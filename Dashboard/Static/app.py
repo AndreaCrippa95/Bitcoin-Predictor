@@ -169,7 +169,7 @@ app.layout = html.Div(children=[
                   dcc.DatePickerRange(id='date_range',
                                         min_date_allowed=datetime(2015, 1, 1),
                                             max_date_allowed=datetime.now(),
-                                                start_date=datetime(2019, 1, 1),
+                                                start_date=datetime(2015, 1, 1),
                                                     end_date=datetime.now(),
                                                         number_of_months_shown=2
                                       ),
@@ -330,7 +330,7 @@ app.layout = html.Div(children=[
 def update_scatter(symbol, start_date, end_date, n_clicks):
     if n_clicks == 0:
         ticker_data = yf.Ticker('BTC-USD')
-        df = ticker_data.history(period='1d', start=datetime(2017, 1, 1), end=datetime.now())
+        df = ticker_data.history(period='1d', start=datetime(2015, 1, 1), end=datetime.now())
 
     else:
         ticker_data = yf.Ticker(symbol)
