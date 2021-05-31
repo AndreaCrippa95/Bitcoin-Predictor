@@ -1,16 +1,16 @@
 
-BM_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/BM.txt'
-DNN_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/DNN.txt'
-DTR_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/DTR.txt'
-EN_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/EN.txt'
-GBR_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/GBR.txt'
-KNR_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/KNR.txt'
-Lasso_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/Lasso.txt'
-LR_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/LR.txt'
-RFR_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/RFR.txt'
-Sequential_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/Sequential.txt'
-SVM_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/SVM.txt'
-FD_txt = '/Users/flavio/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/First_Description.txt'
+BM_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/BM.txt'
+DNN_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/DNN.txt'
+DTR_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/DTR.txt'
+EN_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/EN.txt'
+GBR_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/GBR.txt'
+KNR_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/KNR.txt'
+Lasso_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/Lasso.txt'
+LR_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/LR.txt'
+RFR_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/RFR.txt'
+Sequential_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/Sequential.txt'
+SVM_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/SVM.txt'
+FD_txt = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Dashboard/Static/support/First_Description.txt'
 
 
 BM_txt_markdown = "\t"

@@ -14,7 +14,7 @@ class Data:
     def __init__(self,start,end,days,BTC,Gold,NDAQ,Returns):
         self.start = start
         self.end = end
-        self.prediction_days = days
+        self.prediction_days = int(days)
         self.BTC_Price = BTC
         self.Gold_Price = Gold
         self.NDAQ_Price = NDAQ
@@ -31,10 +31,22 @@ class Data:
         self.nvariables = self.BTC_Price+self.Gold_Price+self.NDAQ_Price+self.Returns
 
     def create_data(self):
-        a = self.start.strftime("%d/%m/%Y")
-        b = self.end.strftime("%d/%m/%Y")
-        c = self.start.strftime("%Y-%m-%d")
-        d = self.end.strftime("%Y-%m-%d")
+        if type(self.start) == str:
+            a = self.start.replace('-','/')
+        else:
+            a = self.start.strftime("%d/%m/%Y")
+        if type(self.end) == str:
+            b = self.end.replace('-', '/')
+        else:
+            b = self.end.strftime("%d/%m/%Y")
+        if type(self.start) == str:
+            c = self.start
+        else:
+            c = self.start.strftime("%Y-%m-%d")
+        if type(self.end) == str:
+            d = self.end
+        else:
+            d = self.end.strftime("%Y-%m-%d")
         date = pd.date_range(start=a, end=b)
         self.df = pd.DataFrame(index=date)
 
@@ -47,9 +59,9 @@ class Data:
             # Drops TimeZone sensitivity from the Tiingo dataframe
             Price = Price.tz_localize(None)
             # Merge the closing Price with the already present dataframe keeping in ciunt the date
-            Price.to_csv('data/Price')
+            Price.to_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Price')
         else:
-            Price = pd.read_csv('data/Price')
+            Price = pd.read_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Price')
             Price['date'] = Price['date'].astype('<M8[ns]')
             Price.index = Price['date']
 
@@ -61,9 +73,9 @@ class Data:
             if not self.TestMode:
             #Gold prices from Quandl, I suppose AM is open and PM is close?
                 Gold = quandl.get("LBMA/GOLD", authtoken="Ti1UcxgbNyuqmB78s14S",start_date=c, end_date=d)
-                Gold.to_csv('data/Gold')
+                Gold.to_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Gold')
             else:
-                Gold = pd.read_csv('data/Gold')
+                Gold = pd.read_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/Gold')
                 Gold['Date'] = Gold['Date'].astype('<M8[ns]')
                 Gold.index = Gold['Date']
             self.df = pd.merge(self.df,Gold['USD (PM)'], how='outer', left_index=True, right_index=True)
@@ -76,9 +88,9 @@ class Data:
                 NDAQ = web.get_data_tiingo(Ticker,c,d, api_key = ('eef2cf8be7666328395f2702b5712e533ea072b9'))
                 NDAQ = NDAQ.droplevel('symbol')
                 NDAQ = NDAQ.tz_localize(None)
-                NDAQ.to_csv('data/NDAQ')
+                NDAQ.to_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/NDAQ')
             else:
-                NDAQ = pd.read_csv('data/NDAQ')
+                NDAQ = pd.read_csv('/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/NDAQ')
                 NDAQ['date'] = NDAQ['date'].astype('<M8[ns]')
                 NDAQ.index = NDAQ['date']
             self.df = pd.merge(self.df,NDAQ['close'], how='outer', left_index=True, right_index=True)
