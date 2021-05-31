@@ -28,19 +28,19 @@ class Method:
         assert self.model in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR'], "invalid model"
 
         if self.model in ['RFR']:
-            mod = RandomForestRegressor()
+            mod = RandomForestRegressor(n_estimators=50,criterion='mse')
         elif self.model in ['GBR']:
-            mod = GradientBoostingRegressor()
+            mod = GradientBoostingRegressor(n_estimators=100)
         elif self.model in ['LR']:
             mod = LinearRegression()
         elif self.model in ['Lasso']:
             mod = Lasso()
         elif self.model in ['KNR']:
-            mod = KNeighborsRegressor()
+            mod = KNeighborsRegressor(n_neighbors=3)
         elif self.model in ['EN']:
             mod = ElasticNet()
         elif self.model in ['DTR']:
-            mod = DecisionTreeRegressor()
+            mod = DecisionTreeRegressor(max_depth=5,max_leaf_nodes=15)
 
         mod.fit(self.Data.X_tr, self.Data.y_tr.ravel())
         results = mod.predict(self.Data.X_te)
