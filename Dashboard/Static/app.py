@@ -29,6 +29,8 @@ from ResultClass import Results
 # 001 - JS & CSS, Layout
 ####################################################################################################
 
+path = '/Users/andreacrippa/Documents/GitHub/'
+
 # Java
 external_scripts = [
     'https://www.google-analytics.com/analytics.js',
@@ -76,17 +78,17 @@ options=[
         ]
 
 list_of_ourgraphs = [
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_BM.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_DNN.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_DTR.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_EN.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_GBR.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_KNR.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_Lasso.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_LR.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_RFR.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_Sequential.png',
-        '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/Graphs/Bitcoin_SVM.png'
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_BM.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_DNN.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_DTR.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_EN.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_GBR.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_KNR.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_Lasso.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_LR.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_RFR.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_Sequential.png',
+        path + 'Bitcoin-Predictor/Graphs/Bitcoin_SVM.png'
         ]
 
 list_of_our_methods = [
@@ -108,7 +110,7 @@ list_of_our_days = [5,10,15,20]
 list_of_our_variables = ['BTC Price', 'Gold Price', 'NASDAQ Price','BTC Returns']
 
 # DF Graph
-file_path = '/Users/andreacrippa/Documents/GitHub/Bitcoin-Predictor/data/DataFrame'
+file_path = path + 'Bitcoin-Predictor/data/DataFrame'
 df = pd.read_csv(file_path, header=0)
 df.columns.values[0] = 'Date'
 df.columns.values[1] = 'BTC_Price'
