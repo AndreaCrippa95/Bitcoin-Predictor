@@ -1,0 +1,56 @@
+Testing with the following conditions: 
+Prediction Days: 5 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of GBR
+--------------------------------------------------------------------------------
+R-squared: 0.8934319517697844
+Mean squared error: 2195168.298064051
+Mean absolute error: 710.4459875560964
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 10 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of GBR
+--------------------------------------------------------------------------------
+R-squared: 0.7903103657267038
+Mean squared error: 4750783.73161735
+Mean absolute error: 1157.504186611793
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 15 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of GBR
+--------------------------------------------------------------------------------
+R-squared: 0.7660199331869677
+Mean squared error: 5057559.0791819515
+Mean absolute error: 1044.791918340147
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 20 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of GBR
+--------------------------------------------------------------------------------
+R-squared: 0.7216324633624631
+Mean squared error: 6574512.275760766
+Mean absolute error: 1222.7138429489407
+--------------------------------------------------------------------------------

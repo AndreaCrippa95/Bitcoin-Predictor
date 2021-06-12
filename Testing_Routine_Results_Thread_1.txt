@@ -1,0 +1,56 @@
+Testing with the following conditions: 
+Prediction Days: 5 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of LR
+--------------------------------------------------------------------------------
+R-squared: 0.9765405498336747
+Mean squared error: 505244.782668326
+Mean absolute error: 336.36604541149774
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 10 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of LR
+--------------------------------------------------------------------------------
+R-squared: 0.9327365852092864
+Mean squared error: 1189853.7211463314
+Mean absolute error: 545.8785756801799
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 15 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of LR
+--------------------------------------------------------------------------------
+R-squared: 0.8685631370432966
+Mean squared error: 2780424.5381930307
+Mean absolute error: 876.8239581509972
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 20 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of LR
+--------------------------------------------------------------------------------
+R-squared: 0.792650824962027
+Mean squared error: 4847209.173793338
+Mean absolute error: 1186.6339595220338
+--------------------------------------------------------------------------------

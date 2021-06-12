@@ -13,8 +13,7 @@ from sklearn.svm import SVR
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM, Input
 from Brownian_Motion import Brownian
-from ML_Model import DNN,RNN
-from DataClass import Data
+
 
 class Method:
 
@@ -25,7 +24,7 @@ class Method:
         self.Data = Data
 
     def MachineLearning(self):
-        assert self.model in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR'], "invalid model"
+        assert self.model in ['RFR', 'GBR', 'LR','Lasso','KNR','EN','DTR','SVM'], "invalid model"
 
         if self.model in ['RFR']:
             mod = RandomForestRegressor(n_estimators=50,criterion='mse')
@@ -34,13 +33,15 @@ class Method:
         elif self.model in ['LR']:
             mod = LinearRegression()
         elif self.model in ['Lasso']:
-            mod = Lasso()
+            mod = Lasso(alpha=1)
         elif self.model in ['KNR']:
             mod = KNeighborsRegressor(n_neighbors=3)
         elif self.model in ['EN']:
-            mod = ElasticNet()
+            mod = ElasticNet(alpha=1)
         elif self.model in ['DTR']:
             mod = DecisionTreeRegressor(max_depth=5,max_leaf_nodes=15)
+        elif self.model in ['SVM']:
+            mod = SVR(kernel='rbf', C=1e3, gamma=0.01)
 
         mod.fit(self.Data.X_tr, self.Data.y_tr.ravel())
         results = mod.predict(self.Data.X_te)
@@ -110,19 +111,6 @@ class Method:
         a = val.item()
         b = Brownian(s0=a)
         return b.stock_price(deltaT=self.days)
-
-    def SVM(self):
-        assert self.model in ['SVM'], "invalid model"
-        scaler = MinMaxScaler()
-        scaler.fit(self.Data.X_tr)
-        # Create and train the Support Vector Machine (Regressor)
-        svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.01)
-        svr_rbf.fit(self.Data.X_tr, self.Data.y_tr.ravel())
-
-        results = svr_rbf.predict(self.Data.X_te)
-        results = results.reshape(-1, 1)
-        results = scaler.inverse_transform(results)
-        return results
 
     def DNN(self):
         X_train = np.reshape(self.Data.X_tr, (self.Data.X_tr.shape[0], self.Data.X_tr.shape[1], 1))

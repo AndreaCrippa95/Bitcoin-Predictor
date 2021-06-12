@@ -28,7 +28,7 @@ class Results:
         c = e.strftime("%m/%d/%Y")
         self.date = pd.date_range(start=b, end=c)
         self.df2 = pd.DataFrame(index=self.date)
-        self.TestMode = False
+        self.TestMode = True
         if not self.TestMode:
             self.Ticker = 'btcusd'
             Price = web.get_data_tiingo(self.Ticker, end.strftime("%Y-%m-%d"), e.strftime("%Y-%m-%d"),
