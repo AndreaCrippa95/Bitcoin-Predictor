@@ -30,7 +30,7 @@ df = dat.df
 
 def thread1():
     f = open('Testing_Routine_Results_Thread_1.txt', 'w')  # open file for output
-    for h in range(5, 20, 5):
+    for h in range(5, 25, 5):
         prediction_days = h
         print('Testing with the following conditions: \n'
               'Prediction Days: %s \n'
@@ -39,58 +39,6 @@ def thread1():
               'Nasdaq Price: %s \n'
               'BTC Returns: %s \n' % (prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns),
               file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-
-        lim = 25
-        Y_TRUE = []
-        Y_PRED = []
-        i = 0
-        while i < lim:
-            start_date = dt.date(2012, 2, 1)
-            end_date = dt.date(2020, 12, 31)
-
-            time_between_dates = end_date - start_date
-            days_between_dates = time_between_dates.days
-            random_number_of_days = random.randrange(days_between_dates)
-            randomdate = start_date + dt.timedelta(days=random_number_of_days)
-            randomdate = pd.to_datetime(randomdate)
-            randomdate = randomdate.to_pydatetime()
-
-            dat2 = Data(start_date, randomdate, prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns)
-            dat2.create_data()
-            df2 = dat2.df
-            met = Method(df2, ChModel='DNN', days=prediction_days, Data=dat2)
-
-            Y_PRED.append(met.DNN())
-
-            rand = randomdate + dt.timedelta(prediction_days)
-            df3 = df[df.index < rand].tail(prediction_days)
-            Y_TRUE.append(np.array(df3[df3.columns[0]]))
-            i += 1
-
-        print('\nAccuracy of DNN', file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-        print('-' * 80, file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-        print('R-squared: %s' % r2_score(np.array(Y_TRUE).reshape(-1, 1), np.array(Y_PRED).reshape(-1, 1)),
-              file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-        print('Mean squared error: %s' % mean_squared_error(np.array(Y_TRUE).reshape(-1, 1),
-                                                            np.array(Y_PRED).reshape(-1, 1)),
-              file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-        print('Mean absolute error: %s' % mean_absolute_error(np.array(Y_TRUE).reshape(-1, 1),
-                                                              np.array(Y_PRED).reshape(-1, 1)),
-              file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-        print('-' * 80, file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
-
-
-def thread2():
-    f = open('Testing_Routine_Results_Thread_2.txt', 'w')  # open file for output
-    for h in range(5, 20, 5):
-        prediction_days = h
-        print('Testing with the following conditions: \n'
-              'Prediction Days: %s \n'
-              'BTC Price: %s \n'
-              'Gold Price: %s \n'
-              'Nasdaq Price: %s \n'
-              'BTC Returns: %s \n' % (prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns),
-              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
 
         lim = 1000
         Y_TRUE = []
@@ -119,22 +67,22 @@ def thread2():
             Y_TRUE.append(np.array(df3[df3.columns[0]]))
             i += 1
 
-        print('\nAccuracy of Linear Regression', file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
-        print('-' * 80, file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+        print('\nAccuracy of LR', file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
+        print('-' * 80, file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
         print('R-squared: %s' % r2_score(np.array(Y_TRUE).reshape(-1, 1), np.array(Y_PRED).reshape(-1, 1)),
-              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+              file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
         print('Mean squared error: %s' % mean_squared_error(np.array(Y_TRUE).reshape(-1, 1),
                                                             np.array(Y_PRED).reshape(-1, 1)),
-              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+              file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
         print('Mean absolute error: %s' % mean_absolute_error(np.array(Y_TRUE).reshape(-1, 1),
                                                               np.array(Y_PRED).reshape(-1, 1)),
-              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
-        print('-' * 80, file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+              file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
+        print('-' * 80, file=open('Testing_Routine_Results_Thread_1.txt', 'a'))
 
 
-def thread3():
-    f = open('Testing_Routine_Results_Thread_3.txt', 'w')  # open file for output
-    for h in range(5, 20, 5):
+def thread2():
+    f = open('Testing_Routine_Results_Thread_2.txt', 'w')  # open file for output
+    for h in range(5, 25, 5):
         prediction_days = h
         print('Testing with the following conditions: \n'
               'Prediction Days: %s \n'
@@ -142,7 +90,7 @@ def thread3():
               'Gold Price: %s \n'
               'Nasdaq Price: %s \n'
               'BTC Returns: %s \n' % (prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns),
-              file=open('Testing_Routine_Results_Thread_3.txt', 'a'))
+              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
 
         lim = 1000
         Y_TRUE = []
@@ -162,7 +110,7 @@ def thread3():
             dat2 = Data(start_date, randomdate, prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns)
             dat2.create_data()
             df2 = dat2.df
-            met = Method(df2, ChModel='RFR', days=prediction_days, Data=dat2)
+            met = Method(df2, ChModel='KNR', days=prediction_days, Data=dat2)
 
             Y_PRED.append(met.MachineLearning())
 
@@ -171,7 +119,59 @@ def thread3():
             Y_TRUE.append(np.array(df3[df3.columns[0]]))
             i += 1
 
-        print('\nAccuracy of RFR', file=open('Testing_Routine_Results_Thread_3.txt', 'a'))
+        print('\nAccuracy of KNR', file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+        print('-' * 80, file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+        print('R-squared: %s' % r2_score(np.array(Y_TRUE).reshape(-1, 1), np.array(Y_PRED).reshape(-1, 1)),
+              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+        print('Mean squared error: %s' % mean_squared_error(np.array(Y_TRUE).reshape(-1, 1),
+                                                            np.array(Y_PRED).reshape(-1, 1)),
+              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+        print('Mean absolute error: %s' % mean_absolute_error(np.array(Y_TRUE).reshape(-1, 1),
+                                                              np.array(Y_PRED).reshape(-1, 1)),
+              file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+        print('-' * 80, file=open('Testing_Routine_Results_Thread_2.txt', 'a'))
+
+
+def thread3():
+    f = open('Testing_Routine_Results_Thread_3.txt', 'w')  # open file for output
+    for h in range(5, 25, 5):
+        prediction_days = h
+        print('Testing with the following conditions: \n'
+              'Prediction Days: %s \n'
+              'BTC Price: %s \n'
+              'Gold Price: %s \n'
+              'Nasdaq Price: %s \n'
+              'BTC Returns: %s \n' % (prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns),
+              file=open('Testing_Routine_Results_Thread_3.txt', 'a'))
+
+        lim = 50
+        Y_TRUE = []
+        Y_PRED = []
+        i = 0
+        while i < lim:
+            start_date = dt.date(2012, 2, 1)
+            end_date = dt.date(2020, 12, 31)
+
+            time_between_dates = end_date - start_date
+            days_between_dates = time_between_dates.days
+            random_number_of_days = random.randrange(days_between_dates)
+            randomdate = start_date + dt.timedelta(days=random_number_of_days)
+            randomdate = pd.to_datetime(randomdate)
+            randomdate = randomdate.to_pydatetime()
+
+            dat2 = Data(start_date, randomdate, prediction_days, BTC_Price, Gold_Price, NDAQ_Price, Returns)
+            dat2.create_data()
+            df2 = dat2.df
+            met = Method(df2, ChModel='DNN', days=prediction_days, Data=dat2)
+
+            Y_PRED.append(met.DNN())
+
+            rand = randomdate + dt.timedelta(prediction_days)
+            df3 = df[df.index < rand].tail(prediction_days)
+            Y_TRUE.append(np.array(df3[df3.columns[0]]))
+            i += 1
+
+        print('\nAccuracy of DNN', file=open('Testing_Routine_Results_Thread_3.txt', 'a'))
         print('-' * 80, file=open('Testing_Routine_Results_Thread_3.txt', 'a'))
         print('R-squared: %s' % r2_score(np.array(Y_TRUE).reshape(-1, 1), np.array(Y_PRED).reshape(-1, 1)),
               file=open('Testing_Routine_Results_Thread_3.txt', 'a'))
@@ -186,7 +186,7 @@ def thread3():
 
 def thread4():
     f = open('Testing_Routine_Results_Thread_4.txt', 'w')  # open file for output
-    for h in range(5, 20, 5):
+    for h in range(5, 25, 5):
         prediction_days = h
         print('Testing with the following conditions: \n'
               'Prediction Days: %s \n'

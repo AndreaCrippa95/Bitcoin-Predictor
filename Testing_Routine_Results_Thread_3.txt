@@ -1,0 +1,56 @@
+Testing with the following conditions: 
+Prediction Days: 5 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of DNN
+--------------------------------------------------------------------------------
+R-squared: 0.4835607620473631
+Mean squared error: 11743856.029632572
+Mean absolute error: 2330.9717584038435
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 10 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of DNN
+--------------------------------------------------------------------------------
+R-squared: 0.3960227029011577
+Mean squared error: 14939403.061339207
+Mean absolute error: 2739.87015229762
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 15 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of DNN
+--------------------------------------------------------------------------------
+R-squared: 0.23061854125986148
+Mean squared error: 15931329.770994492
+Mean absolute error: 2726.195784808589
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 20 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of DNN
+--------------------------------------------------------------------------------
+R-squared: 0.3364151736547214
+Mean squared error: 10149342.461330941
+Mean absolute error: 2106.7934206250366
+--------------------------------------------------------------------------------

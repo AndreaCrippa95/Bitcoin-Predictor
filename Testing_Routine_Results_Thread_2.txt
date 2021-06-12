@@ -1,0 +1,49 @@
+Testing with the following conditions: 
+Prediction Days: 5 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of KNR
+--------------------------------------------------------------------------------
+R-squared: 0.02098789568706738
+Mean squared error: 21177174.938210905
+Mean absolute error: 2872.3293695345474
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 10 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of KNR
+--------------------------------------------------------------------------------
+R-squared: -0.027278608697904883
+Mean squared error: 21223827.56556662
+Mean absolute error: 2856.6225033380756
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 15 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+
+
+Accuracy of KNR
+--------------------------------------------------------------------------------
+R-squared: -0.011722558373053138
+Mean squared error: 19667674.635666214
+Mean absolute error: 2660.047794306927
+--------------------------------------------------------------------------------
+Testing with the following conditions: 
+Prediction Days: 20 
+BTC Price: True 
+Gold Price: True 
+Nasdaq Price: True 
+BTC Returns: False 
+

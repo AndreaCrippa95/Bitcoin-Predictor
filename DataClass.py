@@ -19,7 +19,7 @@ class Data:
         self.Gold_Price = Gold
         self.NDAQ_Price = NDAQ
         self.Returns = Returns
-        self.TestMode = False
+        self.TestMode = True
 
         self.X_tr = None
         self.X_te = None
@@ -102,7 +102,7 @@ class Data:
             Returns.append(0)
             Index.append(self.df.index[0])
             for i in range(len(self.df)-1):
-                Returns.append((self.df['BTC Price'][i+1]-self.df['BTC Price'][i])/self.df['BTC Price'][i+1])
+                Returns.append((self.df['BTC Price'][i+1]-self.df['BTC Price'][i])/self.df['BTC Price'][i])
                 Index.append(self.df.index[i+1])
             Returns = pd.DataFrame(Returns,index=Index)
             self.df = pd.merge(self.df,Returns, how='outer', left_index=True, right_index=True)
