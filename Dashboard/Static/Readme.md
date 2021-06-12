@@ -1,10 +1,11 @@
 
 
 
-# Welcome to our dashboard
+# Welcome to our Dashboard
 Programming Course
+Advanced Data Analysis Course
 
-Programming Project - UNIL Lausanne 2021
+Programming & ADA Project - UNIL Lausanne 2021
 
 ### Built With 
 ##### mainly
@@ -25,12 +26,31 @@ To get a local copy up and running follow these simple steps.
 
 1. Clone the repo
    ```sh
-   git clone ***don't forget to copy the fig'
+   git clone https://github.com/AndreaCrippa95/Bitcoin-Predictor.git
    ```
 2. Install NPM packages
    ```sh
    npm install requirement.txt
    ```
+3. Follow the link to create a Twitter API
+   ```sh
+   https://developer.twitter.com
+   ```
+4. Change the path in the app.py with your own
+   ```sh
+   path = '/Users/JamesBond/Documents/GitHub/'
+   ```
+
+5. Programming Project
+   ```sh
+   In the folder Bitcoin-Predictor/Dashboard/Static
+   ```
+
+6. ADA Project
+   ```sh
+   In the folder Bitcoin-Predictor
+   ```
+
 
 <!-- PROBLEMS -->
 ###Problems that may occur : 
@@ -62,14 +82,11 @@ conda install -c conda-forge fbprophet
 ####Latency
 It might occure that the prediction part and the twitter part of the dashboard take time to load, please be patient.
 
-####Twitter database
-creation of an account : https://developer.twitter.com/en
-
 <!-- CONTACT -->
 ## Contact
 
 Maximilian SETZER - 
-Maximilian.Setzer@unil.ch"
+Maximilian.Setzer@unil.ch
 
 Andrea CRIPPA - 
 Andrea.Crippa@unil.ch
